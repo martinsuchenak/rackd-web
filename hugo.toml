@@ -1,7 +1,14 @@
 baseURL = 'https://docs.rackd.io/'
 languageCode = 'en-us'
-title = 'Rackd Documentation'
-theme = 'hugo-theme-relearn'
+title = 'Rackd'
+theme = 'rackd'
+
+# Site parameters
+[params]
+  description = 'IPAM and Device Inventory System - A powerful solution for managing IP addresses, network devices, and datacenter infrastructure'
+  github = 'https://github.com/martinsuchenak/rackd'
+  version = 'latest'
+  license = 'MIT'
 
 # Enable necessary features
 enableRobotsTXT = true
@@ -18,46 +25,6 @@ paginate = 10
     source = 'assets/notwatching/hugo_stats\.json'
     target = 'css'
 
-# Theme parameters
-[params]
-  # Theme variants
-  themeVariant = ['rackd-light', 'rackd-dark', 'auto']
-  themeVariantAuto = ['rackd-light', 'rackd-dark']
-
-  # Author information
-  author = 'Martin Suchenak'
-
-  # Edit links
-  editURL = 'https://github.com/martinsuchenak/rackd-web/edit/main/content/'
-
-  # Search
-  search = true
-  searchShortcuts = ['/']
-
-  # Breadcrumbs
-  breadcrumb = true
-
-  # Table of contents
-  toc = true
-
-  # Disable sections
-  disableSeoHiddenPages = true
-
-  # Landing page URL
-  landingPageUrl = '/'
-
-  # Disable print
-  disablePrint = false
-
-  # Collapsible menu
-  collapsibleMenu = true
-
-  # Hide breadcrumb
-  disableBreadcrumb = false
-
-  # Hide Next/Previous
-  disableNextPrev = false
-
 # Markup settings
 [markup]
   [markup.goldmark]
@@ -68,256 +35,12 @@ paginate = 10
     guessSyntax = true
     lineNos = false
     noClasses = false
-    style = 'monokai'
+    style = 'github'
   [markup.tableOfContents]
     startLevel = 2
     endLevel = 4
 
 # Outputs
 [outputs]
-  home = ['HTML', 'RSS', 'JSON']
+  home = ['HTML', 'RSS']
   section = ['HTML', 'RSS']
-
-# Menu configuration - Getting Started
-[[menu.main]]
-  identifier = 'getting-started'
-  name = 'Getting Started'
-  weight = 1
-[[menu.main]]
-  identifier = 'installation'
-  name = 'Installation'
-  parent = 'getting-started'
-  weight = 1
-[[menu.main]]
-  identifier = 'quickstart'
-  name = 'Quick Start'
-  parent = 'getting-started'
-  weight = 2
-[[menu.main]]
-  identifier = 'configuration'
-  name = 'Configuration'
-  parent = 'getting-started'
-  weight = 3
-[[menu.main]]
-  identifier = 'authentication'
-  name = 'Authentication'
-  parent = 'getting-started'
-  weight = 4
-
-# Menu configuration - User Guides
-[[menu.main]]
-  identifier = 'guides'
-  name = 'User Guides'
-  weight = 2
-[[menu.main]]
-  identifier = 'devices'
-  name = 'Managing Devices'
-  parent = 'guides'
-  weight = 1
-[[menu.main]]
-  identifier = 'networks'
-  name = 'Network Management'
-  parent = 'guides'
-  weight = 2
-[[menu.main]]
-  identifier = 'datacenters'
-  name = 'Datacenters'
-  parent = 'guides'
-  weight = 3
-[[menu.main]]
-  identifier = 'discovery'
-  name = 'Discovery & Scanning'
-  parent = 'guides'
-  weight = 4
-[[menu.main]]
-  identifier = 'relationships'
-  name = 'Device Relationships'
-  parent = 'guides'
-  weight = 5
-[[menu.main]]
-  identifier = 'lifecycle'
-  name = 'Device Lifecycle'
-  parent = 'guides'
-  weight = 6
-
-# Menu configuration - Features
-[[menu.main]]
-  identifier = 'features'
-  name = 'Features'
-  weight = 3
-[[menu.main]]
-  identifier = 'dns'
-  name = 'DNS Integration'
-  parent = 'features'
-  weight = 1
-[[menu.main]]
-  identifier = 'webhooks'
-  name = 'Webhooks & Events'
-  parent = 'features'
-  weight = 2
-[[menu.main]]
-  identifier = 'custom-fields'
-  name = 'Custom Fields'
-  parent = 'features'
-  weight = 3
-[[menu.main]]
-  identifier = 'circuits'
-  name = 'Circuit Tracking'
-  parent = 'features'
-  weight = 4
-[[menu.main]]
-  identifier = 'nat'
-  name = 'NAT Management'
-  parent = 'features'
-  weight = 5
-[[menu.main]]
-  identifier = 'dashboard'
-  name = 'Dashboard & Analytics'
-  parent = 'features'
-  weight = 6
-
-# Menu configuration - Interfaces
-[[menu.main]]
-  identifier = 'interfaces'
-  name = 'Interfaces'
-  weight = 4
-[[menu.main]]
-  identifier = 'webui'
-  name = 'Web UI'
-  parent = 'interfaces'
-  weight = 1
-[[menu.main]]
-  identifier = 'cli'
-  name = 'CLI Reference'
-  parent = 'interfaces'
-  weight = 2
-[[menu.main]]
-  identifier = 'api'
-  name = 'REST API'
-  parent = 'interfaces'
-  weight = 3
-[[menu.main]]
-  identifier = 'mcp'
-  name = 'MCP Server'
-  parent = 'interfaces'
-  weight = 4
-
-# Menu configuration - Integrations
-[[menu.main]]
-  identifier = 'integrations'
-  name = 'Integrations'
-  weight = 5
-[[menu.main]]
-  identifier = 'terraform'
-  name = 'Terraform Provider'
-  parent = 'integrations'
-  weight = 1
-[[menu.main]]
-  identifier = 'ansible'
-  name = 'Ansible Collection'
-  parent = 'integrations'
-  weight = 2
-[[menu.main]]
-  identifier = 'monitoring'
-  name = 'Monitoring Systems'
-  parent = 'integrations'
-  weight = 3
-
-# Menu configuration - Examples
-[[menu.main]]
-  identifier = 'examples'
-  name = 'Examples'
-  weight = 6
-[[menu.main]]
-  identifier = 'ipam-workflows'
-  name = 'IPAM Workflows'
-  parent = 'examples'
-  weight = 1
-[[menu.main]]
-  identifier = 'discovery-examples'
-  name = 'Discovery Examples'
-  parent = 'examples'
-  weight = 2
-[[menu.main]]
-  identifier = 'scripts'
-  name = 'Sample Scripts'
-  parent = 'examples'
-  weight = 3
-
-# Menu configuration - Operations
-[[menu.main]]
-  identifier = 'operations'
-  name = 'Operations'
-  weight = 7
-[[menu.main]]
-  identifier = 'deployment'
-  name = 'Deployment Guide'
-  parent = 'operations'
-  weight = 1
-[[menu.main]]
-  identifier = 'backup'
-  name = 'Backup & Restore'
-  parent = 'operations'
-  weight = 2
-[[menu.main]]
-  identifier = 'security'
-  name = 'Security Hardening'
-  parent = 'operations'
-  weight = 3
-[[menu.main]]
-  identifier = 'monitoring-ops'
-  name = 'Monitoring'
-  parent = 'operations'
-  weight = 4
-[[menu.main]]
-  identifier = 'troubleshooting'
-  name = 'Troubleshooting'
-  parent = 'operations'
-  weight = 5
-
-# Menu configuration - Reference
-[[menu.main]]
-  identifier = 'reference'
-  name = 'Reference'
-  weight = 8
-[[menu.main]]
-  identifier = 'api-reference'
-  name = 'API Reference'
-  parent = 'reference'
-  weight = 1
-[[menu.main]]
-  identifier = 'cli-commands'
-  name = 'CLI Commands'
-  parent = 'reference'
-  weight = 2
-[[menu.main]]
-  identifier = 'config-reference'
-  name = 'Configuration'
-  parent = 'reference'
-  weight = 3
-[[menu.main]]
-  identifier = 'database-schema'
-  name = 'Database Schema'
-  parent = 'reference'
-  weight = 4
-
-# Menu configuration - Development
-[[menu.main]]
-  identifier = 'development'
-  name = 'Development'
-  weight = 9
-[[menu.main]]
-  identifier = 'architecture'
-  name = 'Architecture'
-  parent = 'development'
-  weight = 1
-[[menu.main]]
-  identifier = 'contributing'
-  name = 'Contributing'
-  parent = 'development'
-  weight = 2
-[[menu.main]]
-  identifier = 'testing'
-  name = 'Testing'
-  parent = 'development'
-  weight = 3

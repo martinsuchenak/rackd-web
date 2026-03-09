@@ -1,23 +1,9 @@
 ---
 title: "User Guides"
-description: "Learn how to manage devices, networks, and discover your infrastructure"
+description: "Learn how to use Rackd's features for infrastructure management"
 weight: 2
 chapter: true
+layout: guides
 ---
 
-# User Guides
-
-These guides cover the core functionality of Rackd for managing your infrastructure.
-
-## What You'll Learn
-
-- Device management and inventory
-- Network and IP address management
-- Datacenter organization
-- Network discovery and scanning
-- Device relationships and dependencies
-- Device lifecycle management
-
-## Sections
-
-{{% children %}}
+These guides cover all of Rackd's features for managing your infrastructure.

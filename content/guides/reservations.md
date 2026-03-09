@@ -2,6 +2,8 @@
 title: "IP Reservations"
 description: "Reserve IP addresses for future use"
 weight: 7
+category: core
+icon: "bookmark"
 ---
 
 

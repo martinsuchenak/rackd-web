@@ -5,8 +5,6 @@ weight: 1
 chapter: true
 ---
 
-# Getting Started
-
 Welcome to Rackd! This section will help you install, configure, and get started with the IPAM and device inventory system.
 
 ## What You'll Learn
@@ -15,7 +13,3 @@ Welcome to Rackd! This section will help you install, configure, and get started
 - Basic configuration options
 - Quick start guide to get up and running
 - Authentication setup
-
-## Sections
-
-{{% children %}}

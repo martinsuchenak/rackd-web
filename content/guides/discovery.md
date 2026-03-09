@@ -2,6 +2,8 @@
 title: "Discovery & Scanning"
 description: "Automated network discovery and device scanning"
 weight: 4
+category: core
+icon: "radar"
 ---
 
 

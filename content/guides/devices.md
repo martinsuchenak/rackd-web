@@ -2,6 +2,8 @@
 title: "Managing Devices"
 description: "Track and manage your infrastructure devices"
 weight: 1
+category: core
+icon: "server"
 ---
 
 

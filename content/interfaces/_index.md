@@ -5,8 +5,6 @@ weight: 4
 chapter: true
 ---
 
-# Interfaces
-
 Rackd provides multiple interfaces for interacting with your data.
 
 ## What You'll Learn
@@ -15,7 +13,3 @@ Rackd provides multiple interfaces for interacting with your data.
 - CLI command reference
 - REST API usage
 - MCP server for AI tool integration
-
-## Sections
-
-{{% children %}}

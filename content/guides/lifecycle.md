@@ -2,6 +2,8 @@
 title: "Device Lifecycle"
 description: "Manage device lifecycle status"
 weight: 6
+category: core
+icon: "refresh"
 ---
 
 

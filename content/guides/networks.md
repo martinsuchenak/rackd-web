@@ -2,6 +2,8 @@
 title: "Network Management"
 description: "Manage networks, subnets, and IP allocations"
 weight: 2
+category: core
+icon: "network"
 ---
 
 

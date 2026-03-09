@@ -2,6 +2,8 @@
 title: "Datacenters"
 description: "Organize devices by datacenter location"
 weight: 3
+category: core
+icon: "building"
 ---
 
 

@@ -5,8 +5,6 @@ weight: 5
 chapter: true
 ---
 
-# Integrations
-
 Integrate Rackd with your existing infrastructure and automation tools.
 
 ## What You'll Learn
@@ -15,7 +13,3 @@ Integrate Rackd with your existing infrastructure and automation tools.
 - Ansible collection integration
 - Monitoring system integration
 - CI/CD automation patterns
-
-## Sections
-
-{{% children %}}

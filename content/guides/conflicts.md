@@ -2,6 +2,8 @@
 title: "Conflict Detection"
 description: "Detect and resolve IP conflicts"
 weight: 8
+category: core
+icon: "alert"
 ---
 
 

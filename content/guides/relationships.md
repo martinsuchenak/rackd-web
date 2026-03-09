@@ -2,6 +2,8 @@
 title: "Device Relationships"
 description: "Track dependencies between devices"
 weight: 5
+category: core
+icon: "link"
 ---
 
 

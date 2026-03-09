@@ -5,8 +5,6 @@ weight: 7
 chapter: true
 ---
 
-# Operations
-
 Operational guides for running Rackd in production.
 
 ## What You'll Learn
@@ -16,7 +14,3 @@ Operational guides for running Rackd in production.
 - Security hardening
 - Monitoring and observability
 - Troubleshooting common issues
-
-## Sections
-
-{{% children %}}
