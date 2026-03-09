@@ -1,0 +1,29 @@
+{{/*
+  Notice/Callout Shortcode
+  Usage: {{< notice type="warning" title="Important" >}}content{{< /notice >}}
+  Types: info, warning, tip, danger
+*/}}
+{{ $type := .Get "type" | default "info" }}
+{{ $title := .Get "title" }}
+{{ $iconMap := dict
+  "info" "ℹ️"
+  "warning" "⚠️"
+  "tip" "💡"
+  "danger" "🚨"
+}}
+{{ $classMap := dict
+  "info" "blue"
+  "warning" "orange"
+  "tip" "green"
+  "danger" "red"
+}}
+<div class="box {{ index $classMap $type }}" role="alert" aria-live="polite">
+  <div class="box-header">
+    <span class="box-icon" aria-hidden="true">{{ index $iconMap $type }}</span>
+    {{ if $title }}<strong class="box-title">{{ $title }}</strong>{{ end }}
+  </div>
+  <div class="box-content">
+    {{ .Inner | markdownify }}
+  </div>
+</div>
+{{- /* Strip trailing newline */ -}}

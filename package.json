@@ -1,0 +1,23 @@
+{
+  "name": "rackd-docs",
+  "version": "1.0.0",
+  "description": "Rackd IPAM Documentation Website",
+  "scripts": {
+    "dev": "hugo server -D --navigateToChanged",
+    "build": "hugo --minify",
+    "build:preview": "hugo -b $DEPLOY_PRIME_URL --minify",
+    "clean": "rm -rf public resources",
+    "test:a11y": "pa11y-ci",
+    "test:a11y:sitemap": "pa11y-ci --sitemap http://localhost:1313/sitemap.xml --sitemap-find https://docs.rackd.io --sitemap-replace http://localhost:1313"
+  },
+  "devDependencies": {
+    "@tailwindcss/cli": "^4.0.0",
+    "tailwindcss": "^4.0.0",
+    "postcss": "^8.4.0",
+    "autoprefixer": "^10.4.0",
+    "pa11y-ci": "^3.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

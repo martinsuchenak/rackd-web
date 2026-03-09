@@ -1,0 +1,30 @@
+{{/*
+  Device Example Shortcode
+  Usage: {{< deviceexample name="Web Server 01" status="active" ip="192.168.1.10" >}}
+  Displays a device example card
+*/}}
+<div class="device-example" role="region" aria-label="Device Example">
+  <div class="device-header">
+    <span class="device-icon" aria-hidden="true">🖥️</span>
+    <span class="device-name">{{ .Get "name" }}</span>
+    <span class="device-status badge badge-{{ .Get "status" | default "active" }}">
+      {{ .Get "status" | default "active" }}
+    </span>
+  </div>
+  {{ if .Get "ip" }}
+  <div class="device-detail">
+    <strong>IP Address:</strong> <code>{{ .Get "ip" }}</code>
+  </div>
+  {{ end }}
+  {{ if .Get "datacenter" }}
+  <div class="device-detail">
+    <strong>Datacenter:</strong> {{ .Get "datacenter" }}
+  </div>
+  {{ end }}
+  {{ if .Inner }}
+  <div class="device-content">
+    {{ .Inner | markdownify }}
+  </div>
+  {{ end }}
+</div>
+{{- /* Strip trailing newline */ -}}

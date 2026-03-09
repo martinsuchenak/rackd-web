@@ -1,0 +1,33 @@
+{
+  "defaults": {
+    "standard": "WCAG2AAA",
+    "runners": ["axe", "htmlcs"],
+    "chromeLaunchConfig": {
+      "args": ["--no-sandbox"]
+    },
+    "timeout": 30000,
+    "wait": 1000,
+    "ignore": [
+      "WCAG2AAA.Principle1.Guideline1_4.1_4_6.G17.Abs",
+      "WCAG2AAA.Principle1.Guideline1_4.1_4_6.G17.BgImage"
+    ]
+  },
+  "urls": [
+    {
+      "url": "http://localhost:1313/",
+      "actions": []
+    },
+    {
+      "url": "http://localhost:1313/getting-started/",
+      "actions": []
+    },
+    {
+      "url": "http://localhost:1313/guides/",
+      "actions": []
+    },
+    {
+      "url": "http://localhost:1313/reference/",
+      "actions": []
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{{/*
+  API Endpoint Shortcode
+  Usage: {{< apiendpoint method="GET" path="/api/devices" >}}
+  Displays an API endpoint with method badge and path
+*/}}
+<div class="api-endpoint" role="region" aria-label="API Endpoint">
+  <div class="api-endpoint-header">
+    <span class="method method-{{ .Get "method" | lower }}" aria-label="HTTP Method: {{ .Get "method" }}">
+      {{ .Get "method" | upper }}
+    </span>
+    <code class="path" aria-label="API Path">{{ .Get "path" }}</code>
+  </div>
+  {{ if .Get "description" }}
+  <p class="api-description">{{ .Get "description" }}</p>
+  {{ end }}
+  {{ .Inner | markdownify }}
+</div>
+{{- /* Strip trailing newline */ -}}

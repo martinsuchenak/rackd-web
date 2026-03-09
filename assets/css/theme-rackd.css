@@ -1,0 +1,348 @@
+/* ==========================================================================
+   Rackd Theme Variant for Hugo Relearn Theme
+   WCAG 2.2 Level AAA Compliant
+   ========================================================================== */
+
+/* Light Theme Variant */
+:root {
+  --MAIN-BG-color: #FFFFFF;
+  --MAIN-TEXT-color: #111827;
+  --MAIN-TITLES-TEXT-color: #0F172A;
+
+  --MAIN-LINK-color: #1D4ED8;
+  --MAIN-LINK-HOVER-color: #1E40AF;
+  --MAIN-ACCENT-color: #3B82F6;
+
+  --MAIN-TAG-BG-color: #E2E8F0;
+  --MAIN-TAG-TEXT-color: #374151;
+
+  --MENU-BG-color: #0F172A;
+  --MENU-TEXT-color: #F9FAFB;
+  --MENU-TITLES-TEXT-color: #FFFFFF;
+  --MENU-LINK-color: #93C5FD;
+  --MENU-LINK-HOVER-color: #BFDBFE;
+  --MENU-LINK-ACTIVE-color: #3B82F6;
+  --MENU-SECTION-ACTIVE-color: #3B82F6;
+  --MENU-SECTION-HR-color: #334155;
+  --MENU-VISITED-color: #C4B5FD;
+
+  --MENU-SEARCH-BG-color: #1E293B;
+  --MENU-SEARCH-BOX-color: #475569;
+  --MENU-SEARCH-ICON-color: #94A3B8;
+  --MENU-SEARCH-PLACEHOLDER-color: #94A3B8;
+
+  --CODE-BG-color: #F1F5F9;
+  --CODE-TEXT-color: #111827;
+  --CODE-BLOCK-BG-color: #1E293B;
+  --CODE-BLOCK-TEXT-color: #E2E8F0;
+  --CODE-INLINE-BG-color: #E2E8F0;
+  --CODE-INLINE-TEXT-color: #111827;
+
+  --BROWSER-theme: light;
+  --MERMAID-theme: default;
+  --OPENAPI-theme: light;
+  --OPENAPI-CODE-theme: idea;
+
+  --BOX-BG-color: #F8FAFC;
+  --BOX-TEXT-color: #374151;
+  --BOX-BLUE-color: #DBEAFE;
+  --BOX-BLUE-TEXT-color: #1E40AF;
+  --BOX-GREEN-color: #D1FAE5;
+  --BOX-GREEN-TEXT-color: #065F46;
+  --BOX-GREY-color: #F1F5F9;
+  --BOX-GREY-TEXT-color: #374151;
+  --BOX-ORANGE-color: #FEF3C7;
+  --BOX-ORANGE-TEXT-color: #78350F;
+  --BOX-RED-color: #FEE2E2;
+  --BOX-RED-TEXT-color: #7F1D1D;
+
+  --BUTTON-BG-color: #3B82F6;
+  --BUTTON-TEXT-color: #FFFFFF;
+  --BUTTON-BORDER-color: #3B82F6;
+
+  --FOCUS-ring-color: #3B82F6;
+  --FOCUS-ring-width: 3px;
+  --FOCUS-ring-offset: 2px;
+}
+
+/* Dark Theme Variant */
+.dark,
+[data-theme="dark"] {
+  --MAIN-BG-color: oklch(0.145 0 0);
+  --MAIN-TEXT-color: #F9FAFB;
+  --MAIN-TITLES-TEXT-color: #FFFFFF;
+
+  --MAIN-LINK-color: #93C5FD;
+  --MAIN-LINK-HOVER-color: #BFDBFE;
+  --MAIN-ACCENT-color: #60A5FA;
+
+  --MAIN-TAG-BG-color: oklch(0.22 0 0);
+  --MAIN-TAG-TEXT-color: #E5E7EB;
+
+  --MENU-BG-color: oklch(0.12 0 0);
+  --MENU-TEXT-color: #F9FAFB;
+  --MENU-TITLES-TEXT-color: #FFFFFF;
+  --MENU-LINK-color: #93C5FD;
+  --MENU-LINK-HOVER-color: #BFDBFE;
+  --MENU-LINK-ACTIVE-color: #60A5FA;
+  --MENU-SECTION-ACTIVE-color: #60A5FA;
+  --MENU-SECTION-HR-color: oklch(0.25 0 0);
+  --MENU-VISITED-color: #C4B5FD;
+
+  --MENU-SEARCH-BG-color: oklch(0.18 0 0);
+  --MENU-SEARCH-BOX-color: oklch(0.30 0 0);
+  --MENU-SEARCH-ICON-color: #94A3B8;
+  --MENU-SEARCH-PLACEHOLDER-color: #94A3B8;
+
+  --CODE-BG-color: oklch(0.20 0 0);
+  --CODE-TEXT-color: #E2E8F0;
+  --CODE-BLOCK-BG-color: oklch(0.18 0 0);
+  --CODE-BLOCK-TEXT-color: #E2E8F0;
+  --CODE-INLINE-BG-color: oklch(0.22 0 0);
+  --CODE-INLINE-TEXT-color: #F9FAFB;
+
+  --BROWSER-theme: dark;
+  --MERMAID-theme: dark;
+  --OPENAPI-theme: dark;
+  --OPENAPI-CODE-theme: obsidian;
+
+  --BOX-BG-color: oklch(0.18 0 0);
+  --BOX-TEXT-color: #E5E7EB;
+  --BOX-BLUE-color: oklch(0.25 0.13 250);
+  --BOX-BLUE-TEXT-color: #93C5FD;
+  --BOX-GREEN-color: oklch(0.25 0.13 150);
+  --BOX-GREEN-TEXT-color: #6EE7B7;
+  --BOX-GREY-color: oklch(0.22 0 0);
+  --BOX-GREY-TEXT-color: #D1D5DB;
+  --BOX-ORANGE-color: oklch(0.30 0.10 90);
+  --BOX-ORANGE-TEXT-color: #FCD34D;
+  --BOX-RED-color: oklch(0.25 0.15 25);
+  --BOX-RED-TEXT-color: #FCA5A5;
+
+  --BUTTON-BG-color: #3B82F6;
+  --BUTTON-TEXT-color: #FFFFFF;
+  --BUTTON-BORDER-color: #3B82F6;
+
+  --FOCUS-ring-color: #60A5FA;
+}
+
+/* ==========================================================================
+   Relearn Theme Overrides - Accessibility Enhancements
+   ========================================================================== */
+
+/* Ensure minimum touch targets */
+#R-sidebar a,
+#R-topbar a,
+.btn,
+.button,
+[role="button"] {
+  min-height: 44px;
+  min-width: 44px;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+
+/* Focus indicators for Relearn theme */
+#R-sidebar a:focus-visible,
+#R-topbar a:focus-visible,
+#R-body a:focus-visible {
+  outline: var(--FOCUS-ring-width) solid var(--FOCUS-ring-color);
+  outline-offset: var(--FOCUS-ring-offset);
+  border-radius: 0.25rem;
+}
+
+/* Search input accessibility */
+#R-sidebar #R-search input,
+#R-sidebar .searchbox input {
+  min-height: 44px;
+  padding: 0.5rem 1rem;
+  border: 2px solid var(--MENU-SEARCH-BOX-color);
+}
+
+#R-sidebar #R-search input:focus-visible {
+  outline: var(--FOCUS-ring-width) solid var(--FOCUS-ring-color);
+  outline-offset: var(--FOCUS-ring-offset);
+}
+
+/* Table of contents accessibility */
+#R-sidebar #R-shortcutmenu {
+  min-height: 44px;
+}
+
+/* Code blocks with proper contrast */
+pre {
+  background-color: var(--CODE-BLOCK-BG-color);
+  color: var(--CODE-BLOCK-TEXT-color);
+}
+
+code {
+  background-color: var(--CODE-INLINE-BG-color);
+  color: var(--CODE-INLINE-TEXT-color);
+}
+
+/* Notice boxes with WCAG AAA contrast */
+.box {
+  padding: 1rem;
+  border-radius: 0.5rem;
+  margin: 1rem 0;
+}
+
+.box.blue {
+  background-color: var(--BOX-BLUE-color);
+  color: var(--BOX-BLUE-TEXT-color);
+  border-left: 4px solid var(--BOX-BLUE-TEXT-color);
+}
+
+.box.green {
+  background-color: var(--BOX-GREEN-color);
+  color: var(--BOX-GREEN-TEXT-color);
+  border-left: 4px solid var(--BOX-GREEN-TEXT-color);
+}
+
+.box.grey {
+  background-color: var(--BOX-GREY-color);
+  color: var(--BOX-GREY-TEXT-color);
+  border-left: 4px solid var(--BOX-GREY-TEXT-color);
+}
+
+.box.orange {
+  background-color: var(--BOX-ORANGE-color);
+  color: var(--BOX-ORANGE-TEXT-color);
+  border-left: 4px solid var(--BOX-ORANGE-TEXT-color);
+}
+
+.box.red {
+  background-color: var(--BOX-RED-color);
+  color: var(--BOX-RED-TEXT-color);
+  border-left: 4px solid var(--BOX-RED-TEXT-color);
+}
+
+/* ==========================================================================
+   Custom Components
+   ========================================================================== */
+
+/* API Endpoint shortcode styling */
+.api-endpoint {
+  background-color: var(--BOX-BG-color);
+  border: 1px solid var(--MENU-SECTION-HR-color);
+  border-radius: var(--FOCUS-ring-width);
+  padding: 1rem;
+  margin: 1rem 0;
+}
+
+.api-endpoint .method {
+  display: inline-block;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  font-weight: 700;
+  font-size: 0.875rem;
+  margin-right: 0.5rem;
+}
+
+.api-endpoint .method.get {
+  background-color: var(--BOX-BLUE-color);
+  color: var(--BOX-BLUE-TEXT-color);
+}
+
+.api-endpoint .method.post {
+  background-color: var(--BOX-GREEN-color);
+  color: var(--BOX-GREEN-TEXT-color);
+}
+
+.api-endpoint .method.put {
+  background-color: var(--BOX-ORANGE-color);
+  color: var(--BOX-ORANGE-TEXT-color);
+}
+
+.api-endpoint .method.delete {
+  background-color: var(--BOX-RED-color);
+  color: var(--BOX-RED-TEXT-color);
+}
+
+.api-endpoint .path {
+  font-family: var(--font-mono);
+  font-weight: 600;
+  color: var(--MAIN-TEXT-color);
+}
+
+/* Device example shortcode */
+.device-example {
+  background-color: var(--BOX-BG-color);
+  border: 1px solid var(--MENU-SECTION-HR-color);
+  border-radius: 0.5rem;
+  padding: 1rem;
+  margin: 1rem 0;
+}
+
+.device-example .device-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--MENU-SECTION-HR-color);
+}
+
+.device-example .device-name {
+  font-weight: 700;
+  color: var(--MAIN-TITLES-TEXT-color);
+}
+
+.device-example .device-status {
+  margin-left: auto;
+}
+
+/* Network diagram container */
+.network-diagram {
+  background-color: var(--BOX-BG-color);
+  border-radius: 0.5rem;
+  padding: 1rem;
+  margin: 1rem 0;
+  overflow-x: auto;
+}
+
+/* Tab container for code examples */
+.tab-container {
+  margin: 1rem 0;
+}
+
+.tab-container .tab-buttons {
+  display: flex;
+  gap: 0;
+  border-bottom: 2px solid var(--MENU-SECTION-HR-color);
+}
+
+.tab-container .tab-button {
+  padding: 0.5rem 1rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  color: var(--MAIN-TEXT-color);
+  min-height: 44px;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -2px;
+}
+
+.tab-container .tab-button:hover {
+  color: var(--MAIN-LINK-color);
+}
+
+.tab-container .tab-button.active {
+  color: var(--MAIN-ACCENT-color);
+  border-bottom-color: var(--MAIN-ACCENT-color);
+}
+
+.tab-container .tab-button:focus-visible {
+  outline: var(--FOCUS-ring-width) solid var(--FOCUS-ring-color);
+  outline-offset: calc(-1 * var(--FOCUS-ring-offset));
+}
+
+.tab-container .tab-content {
+  display: none;
+  padding: 1rem 0;
+}
+
+.tab-container .tab-content.active {
+  display: block;
+}

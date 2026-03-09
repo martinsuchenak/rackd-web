@@ -1,0 +1,17 @@
+{{/*
+  Tab Shortcode (used inside tabs)
+  Usage: {{< tab name="Bash" >}}code here{{< /tab >}}
+*/}}
+{{ $name := .Get "name" }}
+{{ $index := .Scratch.Add "tabIndex" 1 }}
+{{ $currentIndex := .Scratch.Get "tabIndex" }}
+<div
+  class="tab-content{{ if eq $currentIndex 1 }} active{{ end }}"
+  role="tabpanel"
+  id="tabpanel-{{ $name | urlize }}-{{ $currentIndex }}"
+  aria-labelledby="tab-{{ $name | urlize }}-{{ $currentIndex }}"
+  {{ if gt $currentIndex 1 }}hidden{{ end }}
+>
+  {{ .Inner | markdownify }}
+</div>
+{{- /* Strip trailing newline */ -}}
