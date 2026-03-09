@@ -1,0 +1,93 @@
+<header class="site-header" role="banner">
+  <div class="container">
+    <nav class="nav" role="navigation" aria-label="Main navigation">
+      <a href="/" class="nav-logo" aria-label="Rackd - Home">
+        {{ partial "logo.html" . }}
+        <span class="nav-logo-text">Rackd</span>
+      </a>
+
+      <button
+        class="nav-toggle"
+        type="button"
+        aria-expanded="false"
+        aria-controls="nav-menu"
+        aria-label="Toggle navigation menu"
+      >
+        <span class="nav-toggle-bar" aria-hidden="true"></span>
+        <span class="nav-toggle-bar" aria-hidden="true"></span>
+        <span class="nav-toggle-bar" aria-hidden="true"></span>
+      </button>
+
+      <ul id="nav-menu" class="nav-menu" role="menubar">
+        <li role="none">
+          <a href="/" role="menuitem" class="nav-link{{ if .IsHome }} nav-link-active{{ end }}">Home</a>
+        </li>
+        <li role="none">
+          <a href="/getting-started/" role="menuitem" class="nav-link{{ if eq .Section "getting-started" }} nav-link-active{{ end }}">Getting Started</a>
+        </li>
+        <li role="none">
+          <a href="/guides/" role="menuitem" class="nav-link{{ if eq .Section "guides" }} nav-link-active{{ end }}">Guides</a>
+        </li>
+        <li role="none">
+          <a href="https://github.com/martinsuchenak/rackd" role="menuitem" target="_blank" rel="noopener noreferrer" aria-label="GitHub (opens in new tab)" class="nav-link">
+            GitHub
+            <span class="nav-link-external" aria-hidden="true">↗</span>
+          </a>
+        </li>
+
+        <li role="none" class="theme-switcher-wrapper">
+          <div class="theme-switcher">
+            <button
+              type="button"
+              role="menuitem"
+              class="theme-switcher-toggle"
+              aria-expanded="false"
+              aria-haspopup="true"
+              aria-label="Select theme"
+            >
+              <svg class="theme-icon theme-icon-light" aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="5"/>
+                <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+              </svg>
+              <svg class="theme-icon theme-icon-dark" aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+              </svg>
+              <svg class="theme-icon theme-icon-system" aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="2" y="3" width="20" height="14" rx="2"/>
+                <path d="M8 21h8M12 17v4"/>
+              </svg>
+            </button>
+            <ul class="theme-switcher-menu" role="menu" aria-label="Theme options">
+              <li role="none">
+                <button type="button" role="menuitem" class="theme-option" data-theme="light">
+                  <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="5"/>
+                    <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+                  </svg>
+                  Light
+                </button>
+              </li>
+              <li role="none">
+                <button type="button" role="menuitem" class="theme-option" data-theme="dark">
+                  <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+                  </svg>
+                  Dark
+                </button>
+              </li>
+              <li role="none">
+                <button type="button" role="menuitem" class="theme-option" data-theme="system">
+                  <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="2" y="3" width="20" height="14" rx="2"/>
+                    <path d="M8 21h8M12 17v4"/>
+                  </svg>
+                  System
+                </button>
+              </li>
+            </ul>
+          </div>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</header>

@@ -1,0 +1,124 @@
+{{ define "main" }}
+<section class="hero">
+  <div class="container">
+    <div class="hero-logo-wrapper">
+      {{ partial "hero-logo.html" . }}
+    </div>
+    <h1 class="hero-title">{{ .Site.Title }}</h1>
+    <p class="hero-subtitle">{{ .Site.Params.description }}</p>
+    <div class="hero-actions">
+      <a href="/getting-started/installation/" class="btn btn-primary btn-lg">Get Started</a>
+      <a href="https://github.com/martinsuchenak/rackd" class="btn btn-secondary btn-lg" target="_blank" rel="noopener noreferrer">
+        View on GitHub
+        <span aria-hidden="true">↗</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section class="features">
+  <div class="container">
+    <h2 class="features-title">Features</h2>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon" aria-hidden="true">🖥️</div>
+        <h3 class="feature-title">Device Inventory</h3>
+        <p class="feature-description">Comprehensive tracking of servers, network devices, and infrastructure with custom fields, relationships, and lifecycle management.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon" aria-hidden="true">🌐</div>
+        <h3 class="feature-title">IPAM</h3>
+        <p class="feature-description">Full IP Address Management with subnet tracking, automatic allocation, DNS integration, and NAT support.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon" aria-hidden="true">🔍</div>
+        <h3 class="feature-title">Auto Discovery</h3>
+        <p class="feature-description">Automatic network scanning and device discovery with SNMP, SSH, and agent-based collection methods.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon" aria-hidden="true">🔗</div>
+        <h3 class="feature-title">REST API</h3>
+        <p class="feature-description">Complete REST API with OpenAPI documentation for automation and integration with your existing toolchain.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon" aria-hidden="true">🤖</div>
+        <h3 class="feature-title">MCP Server</h3>
+        <p class="feature-description">Built-in Model Context Protocol server for seamless AI assistant integration with Claude and other LLMs.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon" aria-hidden="true">📦</div>
+        <h3 class="feature-title">Single Binary</h3>
+        <p class="feature-description">Zero external dependencies. SQLite database, built-in web UI, and CLI in one easy-to-deploy binary.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="quickstart">
+  <div class="container">
+    <h2 class="quickstart-title">Quick Start</h2>
+    <div class="quickstart-steps">
+      <div class="quickstart-step">
+        <p>
+          <span class="quickstart-step-number" aria-hidden="true">1</span>
+          <span class="quickstart-step-title">Download</span>
+        </p>
+        <pre><code class="language-bash"># Download the latest release
+curl -sL https://github.com/martinsuchenak/rackd/releases/latest/download/rackd-$(uname -s)-$(uname -m) -o rackd
+chmod +x rackd</code></pre>
+      </div>
+
+      <div class="quickstart-step">
+        <p>
+          <span class="quickstart-step-number" aria-hidden="true">2</span>
+          <span class="quickstart-step-title">Run</span>
+        </p>
+        <pre><code class="language-bash">./rackd server</code></pre>
+      </div>
+
+      <div class="quickstart-step">
+        <p>
+          <span class="quickstart-step-number" aria-hidden="true">3</span>
+          <span class="quickstart-step-title">Access</span>
+        </p>
+        <pre><code class="language-bash"># Open http://localhost:8080 in your browser
+# Default credentials are displayed on first run</code></pre>
+      </div>
+    </div>
+
+    <div class="text-center mt-8">
+      <a href="/getting-started/installation/" class="btn btn-primary">Full Installation Guide</a>
+    </div>
+  </div>
+</section>
+
+<section class="features" style="background-color: transparent;">
+  <div class="container">
+    <h2 class="features-title">Integration Ready</h2>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon" aria-hidden="true">🏗️</div>
+        <h3 class="feature-title">Terraform Provider</h3>
+        <p class="feature-description">Manage your infrastructure as code with the official Terraform provider for Rackd.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon" aria-hidden="true">⚙️</div>
+        <h3 class="feature-title">Ansible Collection</h3>
+        <p class="feature-description">Automate configuration and inventory management with Ansible modules.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon" aria-hidden="true">📊</div>
+        <h3 class="feature-title">Monitoring Integration</h3>
+        <p class="feature-description">Export metrics to Prometheus, Grafana, and other monitoring systems.</p>
+      </div>
+    </div>
+  </div>
+</section>
+{{ end }}

@@ -1,0 +1,81 @@
+{{ define "main" }}
+<article class="container" style="padding-top: var(--spacing-8); padding-bottom: var(--spacing-8);">
+  <h1>{{ .Title }}</h1>
+
+  {{ if .Description }}
+  <p style="font-size: var(--font-size-lg); color: var(--color-text-secondary); margin-bottom: var(--spacing-8);">
+    {{ .Description }}
+  </p>
+  {{ end }}
+
+  {{ .Content }}
+
+  {{ if .Pages }}
+  {{/* Group pages by category */}}
+  {{ $corePages := where .Pages ".Params.category" "core" }}
+  {{ $advancedPages := where .Pages ".Params.category" "advanced" }}
+
+  {{/* Core Features */}}
+  {{ if $corePages }}
+  <section style="margin-top: var(--spacing-8);">
+    <h2 style="margin-bottom: var(--spacing-6); color: var(--color-text);">Core Features</h2>
+    <div class="features-grid">
+      {{ range $corePages.ByWeight }}
+      <a href="{{ .RelPermalink }}" class="feature-card" style="text-decoration: none;">
+        {{ if .Params.icon }}
+        <div class="feature-icon">
+          {{ partial "icon.html" .Params.icon }}
+        </div>
+        {{ end }}
+        <h3 class="feature-title">{{ .Title }}</h3>
+        {{ if .Description }}
+        <p class="feature-description">{{ .Description }}</p>
+        {{ end }}
+      </a>
+      {{ end }}
+    </div>
+  </section>
+  {{ end }}
+
+  {{/* Advanced Features */}}
+  {{ if $advancedPages }}
+  <section style="margin-top: var(--spacing-10);">
+    <h2 style="margin-bottom: var(--spacing-6); color: var(--color-text);">Advanced Features</h2>
+    <div class="features-grid">
+      {{ range $advancedPages.ByWeight }}
+      <a href="{{ .RelPermalink }}" class="feature-card" style="text-decoration: none;">
+        {{ if .Params.icon }}
+        <div class="feature-icon">
+          {{ partial "icon.html" .Params.icon }}
+        </div>
+        {{ end }}
+        <h3 class="feature-title">{{ .Title }}</h3>
+        {{ if .Description }}
+        <p class="feature-description">{{ .Description }}</p>
+        {{ end }}
+      </a>
+      {{ end }}
+    </div>
+  </section>
+  {{ end }}
+
+  {{/* Fallback: show all pages if no category */}}
+  {{ $uncategorized := where .Pages ".Params.category" nil }}
+  {{ if $uncategorized }}
+  <section style="margin-top: var(--spacing-8);">
+    <div class="features-grid">
+      {{ range $uncategorized.ByWeight }}
+      <a href="{{ .RelPermalink }}" class="feature-card" style="text-decoration: none;">
+        <h3 class="feature-title">{{ .Title }}</h3>
+        {{ if .Description }}
+        <p class="feature-description">{{ .Description }}</p>
+        {{ end }}
+      </a>
+      {{ end }}
+    </div>
+  </section>
+  {{ end }}
+
+  {{ end }}
+</article>
+{{ end }}

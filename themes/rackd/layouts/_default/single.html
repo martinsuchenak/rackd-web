@@ -1,0 +1,19 @@
+{{ define "main" }}
+<article class="docs-layout container">
+  {{ if .Params.toc | default true }}
+  <aside class="docs-sidebar" aria-label="Table of contents">
+    <h2 class="docs-nav-title">On this page</h2>
+    {{ .TableOfContents }}
+  </aside>
+  {{ end }}
+
+  <div class="docs-content">
+    <h1>{{ .Title }}</h1>
+    {{ if .Description }}
+    <p class="hero-subtitle" style="text-align: left; margin-left: 0;">{{ .Description }}</p>
+    {{ end }}
+
+    {{ .Content }}
+  </div>
+</article>
+{{ end }}
