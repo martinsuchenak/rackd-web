@@ -6,7 +6,6 @@ category: advanced
 icon: "globe"
 ---
 
-
 Rackd provides DNS integration with external DNS servers, allowing automatic management of DNS records for devices in your inventory.
 
 ## Overview
@@ -20,11 +19,11 @@ The DNS integration enables:
 
 ## Supported Providers
 
-| Provider | Type | Description |
-|----------|------|-------------|
-| Technitium | `technitium` | Technitium DNS Server |
-| PowerDNS | `powerdns` | PowerDNS Authoritative Server |
-| BIND | `bind` | BIND DNS Server (via RFC 2136) |
+| Provider | Type | Status |
+|----------|------|--------|
+| Technitium | `technitium` | ✅ Available |
+| PowerDNS | `powerdns` | 🚧 Coming Soon |
+| BIND | `bind` | 🚧 Coming Soon |
 
 ## Configuration
 
@@ -51,13 +50,6 @@ rackd dns provider create \
   --type technitium \
   --endpoint http://dns.example.com:5380 \
   --token-env TECHNITIUM_TOKEN
-
-# Create a PowerDNS provider
-rackd dns provider create \
-  --name "PowerDNS" \
-  --type powerdns \
-  --endpoint http://pdns.example.com:8081 \
-  --token-env POWERDNS_API_KEY
 ```
 
 #### Token Sources
@@ -187,35 +179,15 @@ Requirements:
 
 ### PowerDNS
 
-```bash
-rackd dns provider create \
-  --name "PowerDNS" \
-  --type powerdns \
-  --endpoint http://pdns.example.com:8081 \
-  --token-env POWERDNS_API_KEY
-```
-
-Requirements:
-
-- PowerDNS Authoritative Server 4.x+
-- API key with full zone access
-- HTTP API enabled
+> **🚧 Coming Soon**
+>
+> PowerDNS integration is currently in development.
 
 ### BIND (RFC 2136)
 
-```bash
-rackd dns provider create \
-  --name "BIND" \
-  --type bind \
-  --endpoint 192.168.1.10:53 \
-  --token-env TSIG_KEY
-```
-
-Requirements:
-
-- BIND 9.x server with RFC 2136 dynamic updates enabled
-- TSIG key for authentication
-- UDP/TCP access to DNS server
+> **🚧 Coming Soon**
+>
+> BIND integration via RFC 2136 dynamic updates is currently in development.
 
 ## Reverse DNS (PTR Records)
 
@@ -312,9 +284,3 @@ Example:
 3. **Set up reverse zones** - Enable PTR records for proper reverse DNS
 4. **Test before production** - Always test provider connectivity first
 5. **Monitor sync status** - Check logs for sync errors
-
-## Related Documentation
-
-- [CLI Reference](cli.md) - DNS command documentation
-- [API Reference](api.md) - REST API endpoints
-- [Configuration](configuration-reference.md) - Environment variables
