@@ -1,14 +1,138 @@
 baseURL = 'https://docs.rackd.io/'
 languageCode = 'en-us'
 title = 'Rackd'
-theme = 'rackd'
+theme = 'docstone'
 
 # Site parameters
 [params]
-  description = 'IPAM and Device Inventory System - A powerful solution for managing IP addresses, network devices, and datacenter infrastructure'
+  description = 'Open-source IP Address Management and Device Inventory System'
+  author = 'Martin Suchenak'
   github = 'https://github.com/martinsuchenak/rackd'
   version = 'latest'
   license = 'MIT'
+  themeKey = 'rackd-theme'
+
+  [[params.heroActions]]
+    name = 'Get Started'
+    url = '/getting-started/'
+
+  [[params.heroActions]]
+    name = 'GitHub'
+    url = 'https://github.com/martinsuchenak/rackd'
+    external = true
+
+  [[params.features]]
+    title = 'IP Address Management'
+    description = 'Track networks, subnets, and IP allocations with conflict detection and full audit trail.'
+    icon = '🌐'
+    url = '/guides/networks/'
+
+  [[params.features]]
+    title = 'Device Inventory'
+    description = 'Manage servers, switches, routers, and network devices across your datacenters.'
+    icon = '🖥️'
+    url = '/guides/devices/'
+
+  [[params.features]]
+    title = 'Network Discovery'
+    description = 'Automated scanning with ARP, SNMP, mDNS, NetBIOS, and LLDP protocols.'
+    icon = '🔍'
+    url = '/guides/discovery/'
+
+  [[params.features]]
+    title = 'DNS Integration'
+    description = 'Sync with Cloudflare, Route53, PowerDNS, Technitium, and BIND.'
+    icon = '📡'
+    url = '/guides/dns/'
+
+  [[params.features]]
+    title = 'REST API & CLI'
+    description = 'Full REST API and CLI for automation, scripting, and CI/CD integration.'
+    icon = '⚙️'
+    url = '/interfaces/'
+
+  [[params.features]]
+    title = 'RBAC Security'
+    description = 'Role-based access control with fine-grained permissions and audit logging.'
+    icon = '🔒'
+    url = '/guides/rbac/'
+
+# Navigation menu
+[menus]
+  [[menus.main]]
+    name = 'Getting Started'
+    url = '/getting-started/'
+    weight = 1
+
+  [[menus.main]]
+    name = 'Guides'
+    url = '/guides/'
+    weight = 2
+
+  [[menus.main]]
+    name = 'Interfaces'
+    url = '/interfaces/'
+    weight = 3
+
+  [[menus.main]]
+    name = 'Operations'
+    url = '/operations/'
+    weight = 4
+
+  [[menus.main]]
+    name = 'GitHub'
+    url = 'https://github.com/martinsuchenak/rackd'
+    weight = 5
+    [menus.main.params]
+      external = true
+
+  [[menus.footer]]
+    name = 'Documentation'
+    weight = 1
+
+    [[menus.footer]]
+      parent = 'Documentation'
+      name = 'Getting Started'
+      url = '/getting-started/'
+      weight = 1
+
+    [[menus.footer]]
+      parent = 'Documentation'
+      name = 'User Guides'
+      url = '/guides/'
+      weight = 2
+
+    [[menus.footer]]
+      parent = 'Documentation'
+      name = 'Interfaces'
+      url = '/interfaces/'
+      weight = 3
+
+    [[menus.footer]]
+      parent = 'Documentation'
+      name = 'Operations'
+      url = '/operations/'
+      weight = 4
+
+  [[menus.footer]]
+    name = 'Resources'
+    weight = 2
+
+    [[menus.footer]]
+      parent = 'Resources'
+      name = 'GitHub'
+      url = 'https://github.com/martinsuchenak/rackd'
+      weight = 1
+      [menus.footer.params]
+        external = true
+
+    [[menus.footer]]
+      parent = 'Resources'
+      name = 'Report Issue'
+      url = 'https://github.com/martinsuchenak/rackd/issues'
+      weight = 2
+      [menus.footer.params]
+        external = true
 
 # Enable necessary features
 enableRobotsTXT = true

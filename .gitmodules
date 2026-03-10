@@ -1,0 +1,3 @@
+[submodule "themes/docstone"]
+	path = themes/docstone
+	url = https://github.com/martinsuchenak/docstone
