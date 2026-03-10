@@ -14,7 +14,7 @@ theme = 'docstone'
 
   [[params.heroActions]]
     name = 'Get Started'
-    url = '/getting-started/'
+    url = '/docs/introduction/'
 
   [[params.heroActions]]
     name = 'GitHub'
@@ -25,114 +25,237 @@ theme = 'docstone'
     title = 'IP Address Management'
     description = 'Track networks, subnets, and IP allocations with conflict detection and full audit trail.'
     icon = '🌐'
-    url = '/guides/networks/'
+    url = '/docs/introduction/'
 
   [[params.features]]
     title = 'Device Inventory'
     description = 'Manage servers, switches, routers, and network devices across your datacenters.'
     icon = '🖥️'
-    url = '/guides/devices/'
+    url = '/docs/introduction/'
 
   [[params.features]]
     title = 'Network Discovery'
     description = 'Automated scanning with ARP, SNMP, mDNS, NetBIOS, and LLDP protocols.'
     icon = '🔍'
-    url = '/guides/discovery/'
+    url = '/docs/introduction/'
 
   [[params.features]]
     title = 'DNS Integration'
     description = 'Sync with Cloudflare, Route53, PowerDNS, Technitium, and BIND.'
     icon = '📡'
-    url = '/guides/dns/'
+    url = '/docs/introduction/'
 
   [[params.features]]
     title = 'REST API & CLI'
     description = 'Full REST API and CLI for automation, scripting, and CI/CD integration.'
     icon = '⚙️'
-    url = '/interfaces/'
+    url = '/docs/introduction/'
 
   [[params.features]]
     title = 'RBAC Security'
     description = 'Role-based access control with fine-grained permissions and audit logging.'
     icon = '🔒'
-    url = '/guides/rbac/'
+    url = '/docs/introduction/'
 
 # Navigation menu
 [menus]
   [[menus.main]]
-    name = 'Getting Started'
-    url = '/getting-started/'
-    weight = 1
-
-  [[menus.main]]
-    name = 'Guides'
-    url = '/guides/'
-    weight = 2
-
-  [[menus.main]]
-    name = 'Interfaces'
-    url = '/interfaces/'
-    weight = 3
-
-  [[menus.main]]
-    name = 'Operations'
-    url = '/operations/'
-    weight = 4
-
-  [[menus.main]]
-    name = 'GitHub'
-    url = 'https://github.com/martinsuchenak/rackd'
-    weight = 5
-    [menus.main.params]
-      external = true
-
-  [[menus.footer]]
     name = 'Documentation'
+    url = '/docs/introduction/'
     weight = 1
 
-    [[menus.footer]]
-      parent = 'Documentation'
-      name = 'Getting Started'
-      url = '/getting-started/'
+  # Sidebar navigation
+  [[menus.sidebar]]
+    name = 'Introduction'
+    weight = 1
+
+    [[menus.sidebar]]
+      parent = 'Introduction'
+      name = 'What is Rackd?'
+      url = '/docs/introduction/'
       weight = 1
 
-    [[menus.footer]]
-      parent = 'Documentation'
-      name = 'User Guides'
-      url = '/guides/'
+    [[menus.sidebar]]
+      parent = 'Introduction'
+      name = 'Architecture'
+      url = '/development/architecture/'
       weight = 2
 
-    [[menus.footer]]
-      parent = 'Documentation'
-      name = 'Interfaces'
-      url = '/interfaces/'
+  [[menus.sidebar]]
+    name = 'Deployment'
+    weight = 2
+
+    [[menus.sidebar]]
+      parent = 'Deployment'
+      name = 'Installation'
+      url = '/getting-started/installation/'
+      weight = 1
+
+    [[menus.sidebar]]
+      parent = 'Deployment'
+      name = 'Configuration'
+      url = '/getting-started/configuration/'
+      weight = 2
+
+    [[menus.sidebar]]
+      parent = 'Deployment'
+      name = 'Quickstart'
+      url = '/getting-started/quickstart/'
       weight = 3
 
-    [[menus.footer]]
-      parent = 'Documentation'
-      name = 'Operations'
-      url = '/operations/'
+  [[menus.sidebar]]
+    name = 'Network & Inventory'
+    weight = 3
+
+    [[menus.sidebar]]
+      parent = 'Network & Inventory'
+      name = 'Networks & Subnets'
+      url = '/guides/networks/'
+      weight = 1
+
+    [[menus.sidebar]]
+      parent = 'Network & Inventory'
+      name = 'Device Inventory'
+      url = '/guides/devices/'
+      weight = 2
+
+    [[menus.sidebar]]
+      parent = 'Network & Inventory'
+      name = 'Datacenters'
+      url = '/guides/datacenters/'
+      weight = 3
+
+    [[menus.sidebar]]
+      parent = 'Network & Inventory'
+      name = 'Automated Discovery'
+      url = '/guides/discovery/'
       weight = 4
 
-  [[menus.footer]]
-    name = 'Resources'
-    weight = 2
+    [[menus.sidebar]]
+      parent = 'Network & Inventory'
+      name = 'Relationships'
+      url = '/guides/relationships/'
+      weight = 5
 
-    [[menus.footer]]
-      parent = 'Resources'
-      name = 'GitHub'
-      url = 'https://github.com/martinsuchenak/rackd'
+    [[menus.sidebar]]
+      parent = 'Network & Inventory'
+      name = 'Reservations'
+      url = '/guides/reservations/'
+      weight = 6
+
+    [[menus.sidebar]]
+      parent = 'Network & Inventory'
+      name = 'Conflicts'
+      url = '/guides/conflicts/'
+      weight = 7
+
+  [[menus.sidebar]]
+    name = 'Integrations'
+    weight = 4
+
+    [[menus.sidebar]]
+      parent = 'Integrations'
+      name = 'DNS Providers'
+      url = '/guides/dns/'
       weight = 1
-      [menus.footer.params]
-        external = true
 
-    [[menus.footer]]
-      parent = 'Resources'
-      name = 'Report Issue'
-      url = 'https://github.com/martinsuchenak/rackd/issues'
+    [[menus.sidebar]]
+      parent = 'Integrations'
+      name = 'REST API'
+      url = '/interfaces/api/'
       weight = 2
-      [menus.footer.params]
-        external = true
+
+    [[menus.sidebar]]
+      parent = 'Integrations'
+      name = 'CLI Usage'
+      url = '/interfaces/cli/'
+      weight = 3
+
+    [[menus.sidebar]]
+      parent = 'Integrations'
+      name = 'MCP Server'
+      url = '/interfaces/mcp/'
+      weight = 4
+
+    [[menus.sidebar]]
+      parent = 'Integrations'
+      name = 'Webhooks'
+      url = '/guides/webhooks/'
+      weight = 5
+
+  [[menus.sidebar]]
+    name = 'Administration'
+    weight = 5
+
+    [[menus.sidebar]]
+      parent = 'Administration'
+      name = 'RBAC & Permissions'
+      url = '/guides/rbac/'
+      weight = 1
+
+    [[menus.sidebar]]
+      parent = 'Administration'
+      name = 'User Authentication'
+      url = '/getting-started/user-authentication/'
+      weight = 2
+
+    [[menus.sidebar]]
+      parent = 'Administration'
+      name = 'Backups & Restore'
+      url = '/operations/backup/'
+      weight = 3
+
+    [[menus.sidebar]]
+      parent = 'Administration'
+      name = 'Security'
+      url = '/operations/security/'
+      weight = 4
+
+    [[menus.sidebar]]
+      parent = 'Administration'
+      name = 'Monitoring'
+      url = '/operations/monitoring/'
+      weight = 5
+
+    [[menus.sidebar]]
+      parent = 'Administration'
+      name = 'Troubleshooting'
+      url = '/operations/troubleshooting/'
+      weight = 6
+
+  [[menus.sidebar]]
+    name = 'Advanced'
+    weight = 6
+
+    [[menus.sidebar]]
+      parent = 'Advanced'
+      name = 'Circuits'
+      url = '/guides/circuits/'
+      weight = 1
+
+    [[menus.sidebar]]
+      parent = 'Advanced'
+      name = 'NAT Management'
+      url = '/guides/nat/'
+      weight = 2
+
+    [[menus.sidebar]]
+      parent = 'Advanced'
+      name = 'Custom Fields'
+      url = '/guides/custom-fields/'
+      weight = 3
+
+    [[menus.sidebar]]
+      parent = 'Advanced'
+      name = 'Lifecycle Management'
+      url = '/guides/lifecycle/'
+      weight = 4
+
+    [[menus.sidebar]]
+      parent = 'Advanced'
+      name = 'Full-Text Search'
+      url = '/guides/fts/'
+      weight = 5
 
 # Enable necessary features
 enableRobotsTXT = true

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="{{ .Site.LanguageCode | default "en-us" }}" dir="ltr" data-theme-key="{{ .Site.Params.themeKey | default "docstone-theme" }}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="{{ with .Description }}{{ . }}{{ else }}{{ .Site.Params.description }}{{ end }}">
+  <meta name="theme-color" content="{{ .Site.Params.themeColor | default "#0F172A" }}">
+
+  {{/* Preconnect for performance */}}
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  {{/* WCAG AAA compliant fonts */}}
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <title>{{ if .IsHome }}{{ .Site.Title }} - {{ .Site.Params.description | truncate 60 }}{{ else }}{{ .Title }} | {{ .Site.Title }}{{ end }}</title>
+
+  {{/* Favicon */}}
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+
+  {{/* CSS - theme base + site custom overrides */}}
+  {{ $css := resources.Get "css/main.css" | minify | fingerprint }}
+  <link rel="stylesheet" href="{{ $css.RelPermalink }}" integrity="{{ $css.Data.Integrity }}">
+
+  {{/* Site custom CSS override */}}
+  {{ if fileExists "assets/css/custom.css" }}
+  {{ $customCss := resources.Get "css/custom.css" | minify | fingerprint }}
+  <link rel="stylesheet" href="{{ $customCss.RelPermalink }}" integrity="{{ $customCss.Data.Integrity }}">
+  {{ end }}
+
+  {{/* RSS */}}
+  {{ range .AlternativeOutputFormats -}}
+    {{ printf `<link rel="%s" type="%s" href="%s" title="%s">` .Rel .MediaType.Type .Permalink $.Site.Title | safeHTML }}
+  {{ end -}}
+
+  {{ block "head" . }}{{ end }}
+</head>
+<body>
+  {{/* Skip link for accessibility */}}
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  {{ partial "header.html" . }}
+
+  {{/* Sidebar layout for non-home pages */}}
+  {{ if not .IsHome }}
+  <div class="docs-layout-with-sidebar container">
+    {{ partial "sidebar.html" . }}
+    <main id="main-content" tabindex="-1">
+      {{ block "main" . }}{{ end }}
+    </main>
+  </div>
+  {{ else }}
+  <main id="main-content" tabindex="-1">
+    {{ block "main" . }}{{ end }}
+  </main>
+  {{ end }}
+
+  {{ partial "footer.html" . }}
+
+  {{/* Pagefind search */}}
+  <link href="/pagefind/pagefind-ui.css" rel="stylesheet">
+  <script src="/pagefind/pagefind-ui.js"></script>
+
+  {{/* JavaScript */}}
+  {{ $js := resources.Get "js/main.js" | minify | fingerprint }}
+  <script src="{{ $js.RelPermalink }}" integrity="{{ $js.Data.Integrity }}" defer></script>
+
+  {{ block "scripts" . }}{{ end }}
+</body>
+</html>
