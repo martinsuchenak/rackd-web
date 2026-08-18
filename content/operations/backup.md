@@ -133,7 +133,7 @@ cp /backup/rackd-20240101-020000.db /var/lib/rackd/rackd.db
 
 # Set correct permissions
 chown rackd:rackd /var/lib/rackd/rackd.db
-chmod 644 /var/lib/rackd/rackd.db
+chmod 600 /var/lib/rackd/rackd.db
 
 # Start Rackd service
 systemctl start rackd

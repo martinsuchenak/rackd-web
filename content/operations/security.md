@@ -38,7 +38,7 @@ The built-in Web UI sends this header on all requests. External integrations usi
 
 ## Password Security
 
-- Minimum length: 12 characters (enforced server-side)
+- Minimum length: 8 characters (enforced server-side)
 - Hashing: bcrypt with cost factor 14
 - Password changes invalidate all active sessions for the user
 - Login rate limiting prevents brute-force attacks
@@ -62,19 +62,35 @@ The built-in Web UI sends this header on all requests. External integrations usi
 
 ## OAuth 2.1 Security
 
-- PKCE required (no plain code challenge)
-- Refresh token rotation with replay detection
-- Dynamic client registration
-- Token revocation endpoint
+- PKCE required (no plain code challenge); confidential clients must also present their `client_secret` at the token endpoint
+- Refresh token rotation with replay detection and expiry enforcement
+- Dynamic client registration requires https redirect URIs (loopback http exempt) and explicit catalog scopes — wildcards rejected
+- Issued scopes are clamped to the consenting user's own permissions and re-clamped on refresh
+- Token revocation endpoint authenticates clients and only revokes their own tokens
+- OAuth client management (list/delete) is admin-only
 
 ## Credential Encryption
 
-Device credentials (SSH passwords, SNMP community strings) are encrypted at rest using AES-256-GCM. The encryption key is derived from the server's internal key material.
+Device credentials (SSH passwords, SNMP community strings), DNS provider
+tokens, and webhook signing secrets are encrypted at rest using AES-256-GCM
+with a per-encryption random nonce. The key is the `ENCRYPTION_KEY`
+environment variable (64 hex chars; generate with `openssl rand -hex 32`).
+Rotate it with `rackd credentials rotate-key --new-key <key>` — the command
+re-encrypts credentials, DNS tokens, and webhook secrets. Without the key
+(outside `--dev-mode`) the encrypted features are disabled rather than
+falling back to plaintext.
+
+## Encryption at Rest
+
+- Session tokens are stored **hashed** — a database leak cannot resurrect live sessions
+- API keys and OAuth tokens are stored as SHA-256 hashes
+- Webhook signing secrets are AES-256-GCM encrypted (legacy plaintext rows keep working and re-encrypt on next save)
+- Backups are written with `0600` permissions
 
 ## Webhook Security
 
 - HMAC-SHA256 signatures on webhook payloads (when a secret is configured)
-- SSRF protection: loopback, link-local (169.254.x.x), and unspecified addresses are blocked
+- SSRF protection: loopback, unspecified, link-local (cloud metadata 169.254.0.0/16, IPv6 fe80::/10), multicast and — unless `SSRF_ALLOW_PRIVATE_TARGETS=true` — RFC1918/CGNAT/ULA targets are blocked, including hostnames that resolve into those ranges; redirect targets are re-validated on every hop
 - Secure HTTP client with `SafeDialContext` prevents DNS rebinding
 - URL length capped at 2048 characters
 - Only HTTP and HTTPS schemes allowed
@@ -160,7 +176,7 @@ server {
 }
 ```
 
-Set `TRUST_PROXY=true` when behind a reverse proxy so Rackd reads the real client IP from forwarded headers.
+Set `TRUST_PROXY=true` **together with** `TRUSTED_PROXIES` (comma-separated IPs/CIDRs, e.g. `127.0.0.1,10.0.0.0/8`) when behind a reverse proxy: forwarded headers are honored only from those peers, otherwise ignored (fail-closed) so clients cannot spoof their IP.
 
 ### File Permissions
 

@@ -16,13 +16,13 @@ On first startup, Rackd can create an initial admin user if you provide credenti
 ```bash
 # Required
 INITIAL_ADMIN_USERNAME=admin          # Username for initial admin
-INITIAL_ADMIN_PASSWORD=securepass     # Password (min 12 characters)
+INITIAL_ADMIN_PASSWORD=securepass     # Password (min 8 characters)
 
 # Optional
 INITIAL_ADMIN_EMAIL=admin@example.com  # Email (default: admin@localhost)
 INITIAL_ADMIN_FULL_NAME="Admin User" # Full name (default: System Administrator)
 SESSION_TTL=24h                     # Session timeout (default: 24h)
-SESSION_STORE_TYPE=sqlite           # Session store backend (sqlite, valkey, redis)
+SESSION_STORE_TYPE=sqlite           # Session store backend (sqlite, valkey)
 VALKEY_URL=redis://localhost:6379/0 # Valkey/Redis URL if used
 ```
 
@@ -86,7 +86,7 @@ Sessions expire after the configured TTL (default: 24 hours). The session is aut
 
 ### Session Persistence
 
-As of Rackd v0.x, sessions are fully persistent across server restarts. By default, they are stored directly in the `sqlite` database. You can also configure a `valkey` or `redis` store for distributed deployments using the `SESSION_STORE_TYPE` and `VALKEY_URL` environment variables.
+Sessions are fully persistent across server restarts. By default they are stored directly in the `sqlite` database; a `valkey` store is available for distributed deployments via `SESSION_STORE_TYPE=valkey` and `VALKEY_URL`. Session tokens are stored **hashed**, so a database leak cannot resurrect live sessions.
 
 ### Session Invalidation
 
@@ -158,7 +158,7 @@ rackd user password --id <user-id>
 1. **Change Default Password**: After first login, change the initial admin password
 2. **Use Secrets Management**: Store admin credentials in secrets managers (Kubernetes Secrets, Vault, etc.)
 3. **Enable Audit Logging**: Set `AUDIT_ENABLED=true` to track all user actions
-4. **Use Strong Passwords**: Minimum 12 characters with bcrypt hashing (cost factor 14)
+4. **Use Strong Passwords**: Minimum 8 characters with bcrypt hashing (cost factor 14)
 5. **Set Appropriate Session TTL**: Adjust based on your security requirements
 
 ## Authentication Flow
@@ -204,6 +204,20 @@ If you see this warning at startup:
 2. Check if user is active: `rackd user list`
 3. Verify session hasn't expired
 4. Check server logs for errors
+
+### Lost Admin Password
+
+If the only admin's password is lost and no other admin or API key exists,
+reset it offline with the CLI (no server or authentication required):
+
+```bash
+rackd user reset-password --data-dir /path/to/data --username admin
+```
+
+Stop the server first; the command prompts for a new password (min 8
+characters), hashes it with the same bcrypt policy, and invalidates all
+active sessions. For Docker, see the
+[CLI reference](/interfaces/cli/#user-reset-password).
 
 ### Password Rejected
 

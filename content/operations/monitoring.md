@@ -89,10 +89,12 @@ Rackd exposes Prometheus-compatible metrics at `/metrics` endpoint.
 ### Accessing Metrics
 
 ```bash
-curl http://localhost:8080/metrics
+curl -H "Authorization: Bearer your-api-key" http://localhost:8080/metrics
 ```
 
-**Note**: Metrics endpoint does not require authentication.
+**Note**: The metrics endpoint **requires authentication** (session cookie
+or API key). Create a dedicated low-privilege monitoring user with an API
+key for scrapers.
 
 ### Available Metrics
 
@@ -134,6 +136,9 @@ scrape_configs:
       - targets: ['localhost:8080']
     metrics_path: '/metrics'
     scrape_interval: 30s
+    authorization:
+      type: Bearer
+      credentials: 'your-monitoring-api-key'
 ```
 
 ### Example Queries

@@ -66,7 +66,7 @@ Scan profiles define scanning behavior and can be customized for different netwo
 
 ```bash
 # Create a custom scan profile
-rackd profile create \
+rackd scan-profile create \
   --name "Production Network Scan" \
   --scan-type custom \
   --ports 22,80,443,8080,9090 \
@@ -184,6 +184,27 @@ rackd discovery cancel <scan-id>
 - **Timeout**: 1-60 seconds per host
 - **Rate limiting**: Prevents network flooding
 
+### Docker: use host networking for MAC/hostname detection
+
+MAC addresses come from the host's ARP table (refreshed every 5 seconds
+during a scan) and hostnames largely from broadcast protocols (mDNS,
+NetBIOS, LLDP). Both require Layer-2 proximity to the scanned network:
+
+```yaml
+services:
+  rackd:
+    image: ghcr.io/martinsuchenak/rackd:latest
+    network_mode: host          # share the host network namespace
+    environment:
+      - LISTEN_ADDR=127.0.0.1:8080   # loopback-bind behind your reverse proxy
+```
+
+In the default Docker bridge network, NAT isolates the container from the
+LAN: unicast TCP/ICMP probing still works (devices are found), but ARP
+entries, MAC addresses, vendors, and broadcast hostnames will be missing.
+For full identification without host networking, configure SNMP
+credentials — SNMP is plain UDP and works from bridged containers.
+
 ## Scheduled Scans
 
 Automated recurring scans using cron expressions.
@@ -191,7 +212,7 @@ Automated recurring scans using cron expressions.
 ### Creating Scheduled Scans
 
 ```bash
-rackd scheduled create \
+rackd scheduled-scan create \
   --name "Nightly Network Scan" \
   --network-id <network-id> \
   --profile-id <profile-id> \
@@ -210,17 +231,17 @@ rackd scheduled create \
 
 ```bash
 # List scheduled scans
-rackd scheduled list
+rackd scheduled-scan list
 
 # Enable/disable schedule
-rackd scheduled enable <schedule-id>
-rackd scheduled disable <schedule-id>
+rackd scheduled-scan update --id <schedule-id> --enabled=true
+rackd scheduled-scan update --id <schedule-id> --enabled=false
 
 # Update schedule
-rackd scheduled update <schedule-id> --cron "0 3 * * *"
+rackd scheduled-scan update --id <schedule-id> --cron "0 3 * * *"
 
 # Delete schedule
-rackd scheduled delete <schedule-id>
+rackd scheduled-scan delete --id <schedule-id>
 ```
 
 ### Minimum Interval
@@ -337,16 +358,10 @@ rackd discovery promote <discovered-device-id> \
 
 ### Automatic Promotion Rules
 
-Configure rules for automatic device promotion:
-
-```bash
-# Create promotion rule
-rackd discovery rule create \
-  --network-id <network-id> \
-  --condition "port:22,80" \
-  --device-type server \
-  --auto-promote
-```
+Discovery rules (auto-scan per network) are managed via the REST API
+(`POST /api/discovery/rules` with `network_id`, `enabled`, `scan_type`,
+`interval_hours`) or the web UI; the CLI covers `discovery list`, `discovery
+scan`, and `discovery promote`.
 
 ### Promotion Benefits
 
@@ -361,12 +376,13 @@ rackd discovery rule create \
 
 ```bash
 # Discovery settings
-RACKD_DISCOVERY_MAX_CONCURRENT=10    # Max concurrent scans
-RACKD_DISCOVERY_TIMEOUT=5s           # Per-host timeout
-RACKD_DISCOVERY_CLEANUP_INTERVAL=1h  # Cleanup completed scans
+DISCOVERY_MAX_CONCURRENT=10     # Max concurrent host probes per scan
+DISCOVERY_TIMEOUT=5s            # Per-host timeout
+DISCOVERY_CLEANUP_DAYS=30       # Drop undiscovered devices after N days
+DISCOVERY_SNMPV2C_ENABLED=false # Allow SNMPv2c (cleartext communities)
 
-# Credential encryption
-RACKD_CREDENTIAL_KEY=<32-byte-key>   # Encryption key for credentials
+# Credential encryption (64 hex chars; openssl rand -hex 32)
+ENCRYPTION_KEY=<64-hex-chars>   # Encrypts stored SNMP/SSH credentials
 ```
 
 ### Performance Tuning
@@ -382,7 +398,7 @@ RACKD_CREDENTIAL_KEY=<32-byte-key>   # Encryption key for credentials
 
 ```bash
 # Start scan
-POST /api/v1/discovery/scans
+POST /api/discovery/networks/{network-id}/scan
 {
   "network_id": "net-123",
   "scan_type": "full",
@@ -390,13 +406,13 @@ POST /api/v1/discovery/scans
 }
 
 # Get scan status
-GET /api/v1/discovery/scans/{scan-id}
+GET /api/discovery/scans/{scan-id}
 
 # List discovered devices
-GET /api/v1/discovery/devices?network_id=net-123
+GET /api/discovery/devices?network_id=net-123
 
 # Promote device
-POST /api/v1/discovery/devices/{device-id}/promote
+POST /api/discovery/devices/{device-id}/promote
 {
   "name": "Server 01",
   "type": "server",
@@ -428,7 +444,7 @@ POST /api/v1/discovery/devices/{device-id}/promote
 Enable debug logging for detailed scan information:
 
 ```bash
-RACKD_LOG_LEVEL=debug rackd server
+LOG_LEVEL=debug rackd server
 ```
 
 ### Performance Monitoring

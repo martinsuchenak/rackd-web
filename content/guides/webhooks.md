@@ -129,7 +129,7 @@ Rackd implements robust protection against Server-Side Request Forgery (SSRF) an
 - **Cloud Metadata Blocking**: Connections to the standard `169.254.x.x` link-local range used by AWS/GCP metadata services are blocked
 - **DNS Rebinding Prevention**: Hostnames are resolved first, and Rackd connects strictly to the pre-verified IP address
 
-Note: Standard private intranet subnets (e.g. `10.x.x.x`, `192.168.x.x`) are **permitted** to allow legitimate communication with other internal services on your network.
+Note: Private intranet subnets (RFC1918 `10.x.x.x`/`192.168.x.x`, CGNAT `100.64.0.0/10`, IPv6 ULA) are **blocked by default**. For intentional internal integrations set `SSRF_ALLOW_PRIVATE_TARGETS=true`; loopback, link-local (cloud metadata) and multicast targets are always blocked regardless. Webhook signing secrets are AES-256-GCM encrypted at rest via `ENCRYPTION_KEY`.
 
 ## API Endpoints
 

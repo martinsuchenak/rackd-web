@@ -188,6 +188,20 @@ journalctl -u rackd -n 100
 
 ## API Issues
 
+### Locked Out (Lost Admin Password)
+
+Reset the password offline — no server, no authentication needed:
+
+```bash
+# Stop the server first, then:
+rackd user reset-password --data-dir /path/to/data --username admin
+```
+
+The command prompts for a new password (min 8 characters), applies the
+server's bcrypt hashing, and invalidates all active sessions. See the
+[CLI reference](/interfaces/cli/#user-reset-password) for the Docker
+procedure.
+
 ### Authentication Failures
 
 #### 401 Unauthorized
@@ -204,10 +218,10 @@ journalctl -u rackd -n 100
 
 ```bash
 # Check token is set
-echo $RACKD_API_TOKEN
+echo $RACKD_TOKEN
 
 # Set token
-export RACKD_API_TOKEN=your-secret-token
+export RACKD_TOKEN=your-secret-token
 
 # Or pass in request
 curl -H "Authorization: Bearer your-secret-token" http://localhost:8080/api/devices
@@ -222,13 +236,8 @@ curl -H "Authorization: Bearer your-secret-token" http://localhost:8080/api/devi
 **Solution:**
 
 ```bash
-# Ensure server and client use same token
-# Server
-export RACKD_API_AUTH_TOKEN=mysecret
-rackd server
-
-# Client
-export RACKD_API_TOKEN=mysecret
+# Ensure the client uses a valid API key (created in the web UI or via the CLI)
+export RACKD_TOKEN=your-api-key
 rackd device list
 ```
 
@@ -418,7 +427,7 @@ ssh user@10.0.1.10
 snmpwalk -v2c -c public 10.0.1.10
 
 # Check credential encryption key is set
-export RACKD_ENCRYPTION_KEY=your-32-byte-key
+export ENCRYPTION_KEY=your-32-byte-key
 ```
 
 ### Scheduled Scans Not Running
@@ -552,8 +561,8 @@ api_token: your-secret-token
 EOF
 
 # Or use environment variables
-export RACKD_API_URL=http://localhost:8080
-export RACKD_API_TOKEN=your-secret-token
+export RACKD_SERVER_URL=http://localhost:8080
+export RACKD_TOKEN=your-secret-token
 ```
 
 ## Docker Issues

@@ -18,18 +18,21 @@ Use `--dev-mode` flag on `rackd server` to automatically disable `COOKIE_SECURE`
 | `REQUEST_TIMEOUT` | duration | `30s` | HTTP request timeout |
 | `LOG_FORMAT` | string | `text` | Log format: `text` or `json` |
 | `LOG_LEVEL` | string | `info` | Log level: `trace`, `debug`, `info`, `warn`, `error` |
-| `TRUST_PROXY` | bool | `false` | Trust `X-Forwarded-For` and `X-Real-IP` headers for client IP detection |
 
 ## Security
 
 | Variable | Type | Default | Description |
 |----------|------|---------|-------------|
+| `ENCRYPTION_KEY` | string | _(empty)_ | 64 hex chars (32 bytes). Encrypts stored SNMP/SSH credentials, DNS provider tokens and webhook signing secrets at rest. Generate with `openssl rand -hex 32`. Without it (outside `--dev-mode`) the credentials/DNS features are disabled; with `--dev-mode` a random non-persistent key is used. Rotate with `rackd credentials rotate-key` |
 | `COOKIE_SECURE` | bool | `true` | Set `Secure` flag on session cookies (requires HTTPS). Disable for local dev without TLS |
 | `RATE_LIMIT_ENABLED` | bool | `true` | Enable API rate limiting |
 | `RATE_LIMIT_REQUESTS` | int | `100` | Max requests per window per IP |
 | `RATE_LIMIT_WINDOW` | duration | `1m` | Rate limit sliding window |
 | `LOGIN_RATE_LIMIT_REQUESTS` | int | `5` | Max login attempts per window per IP |
 | `LOGIN_RATE_LIMIT_WINDOW` | duration | `1m` | Login rate limit sliding window |
+| `TRUST_PROXY` | bool | `false` | Honor `X-Forwarded-For` / `X-Real-IP` headers when determining the client IP (rate limiting, audit logging) |
+| `TRUSTED_PROXIES` | string | _(empty)_ | Comma-separated IPs/CIDRs of trusted reverse proxies (e.g. `127.0.0.1,10.0.0.0/8`). Required when `TRUST_PROXY=true`: forwarded headers are honored only when the direct peer matches one of these networks, otherwise ignored (fail-closed) |
+| `SSRF_ALLOW_PRIVATE_TARGETS` | bool | `false` | Permit webhook and DNS provider endpoints on private ranges (RFC1918/CGNAT/ULA) for intentional internal integrations. Loopback, link-local (cloud metadata) and multicast targets are always blocked |
 
 ## Sessions
 
@@ -46,7 +49,7 @@ These are only used on first startup when no users exist.
 | Variable | Type | Default | Description |
 |----------|------|---------|-------------|
 | `INITIAL_ADMIN_USERNAME` | string | _(empty)_ | Bootstrap admin username |
-| `INITIAL_ADMIN_PASSWORD` | string | _(empty)_ | Bootstrap admin password (min 12 characters) |
+| `INITIAL_ADMIN_PASSWORD` | string | _(empty)_ | Bootstrap admin password (min 8 characters) |
 | `INITIAL_ADMIN_EMAIL` | string | `admin@localhost` | Bootstrap admin email |
 | `INITIAL_ADMIN_FULL_NAME` | string | `System Administrator` | Bootstrap admin display name |
 

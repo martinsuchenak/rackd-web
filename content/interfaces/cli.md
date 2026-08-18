@@ -17,27 +17,30 @@ The Rackd CLI provides full access to all functionality via command-line command
 rackd [global options] command [command options] [arguments...]
 ```
 
-### Global Flags
+### Global Environment Variables
 
-| Flag | Environment Variable | Default | Description |
-|------|---------------------|---------|-------------|
-| `--api-url` | `RACKD_API_URL` | `http://localhost:8080` | API server URL |
-| `--api-token` | `RACKD_API_TOKEN` | - | API authentication token |
-| `--timeout` | `RACKD_TIMEOUT` | `30s` | Request timeout |
-| `--output` | `RACKD_OUTPUT` | `table` | Output format (table, json, yaml) |
-| `--help, -h` | - | - | Show help |
-| `--version, -v` | - | - | Show version |
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `RACKD_SERVER_URL` | `http://localhost:8080` | API server URL |
+| `RACKD_TOKEN` | - | API key used as Bearer token |
+| `RACKD_VERIFY_SSL` | `true` | Set `false`/`0` to skip TLS verification (self-signed certs) |
+| `--help, -h` | - | Show help (all commands) |
+| `--version, -v` | - | Show version |
 
 ### Configuration File
 
-The CLI reads configuration from `~/.rackd/config.yaml`:
+The CLI reads configuration from `~/.config/rackd/config.json` (JSON,
+XDG-aware):
 
-```yaml
-api_url: http://localhost:8080
-api_token: your-secret-token
-timeout: 30s
-output: table
+```json
+{
+  "server_url": "http://localhost:8080",
+  "token": "your-api-key",
+  "verify_ssl": true
+}
 ```
+
+Environment variables override the config file.
 
 ## Commands
 
@@ -51,17 +54,17 @@ rackd server [options]
 
 #### Options
 
-| Flag | Environment Variable | Default | Description |
-|------|---------------------|---------|-------------|
-| `--listen-addr` | `RACKD_LISTEN_ADDR` | `:8080` | Listen address |
-| `--data-dir` | `RACKD_DATA_DIR` | `./data` | Data directory |
-| `--api-auth-token` | `RACKD_API_AUTH_TOKEN` | - | API auth token |
-| `--mcp-auth-token` | `RACKD_MCP_AUTH_TOKEN` | - | MCP auth token |
-| `--log-level` | `RACKD_LOG_LEVEL` | `info` | Log level |
-| `--log-format` | `RACKD_LOG_FORMAT` | `text` | Log format (text/json) |
-| `--discovery-enabled` | `RACKD_DISCOVERY_ENABLED` | `true` | Enable discovery |
-| `--discovery-interval` | `RACKD_DISCOVERY_INTERVAL` | `24h` | Discovery interval |
-| `--encryption-key` | `RACKD_ENCRYPTION_KEY` | - | Credential encryption key |
+| Flag | Default | Description |
+|------|---------|-------------|
+| `--listen-addr` | `:8080` | Listen address (env `LISTEN_ADDR`) |
+| `--data-dir` | `./data` | Data directory (env `DATA_DIR`) |
+| `--log-level` | `info` | Log level (trace/debug/info/warn/error; env `LOG_LEVEL`) |
+| `--log-format` | `text` | Log format (text/json; env `LOG_FORMAT`) |
+| `--discovery-interval` | `24h` | Discovery scan interval (env `DISCOVERY_INTERVAL`) |
+| `--dev-mode` | `false` | Development mode: relaxes security (no TLS cookie requirement, no rate limiting, allows missing `ENCRYPTION_KEY`) |
+
+Server configuration (encryption, rate limiting, OAuth and more) is
+environment-driven — see the [Configuration Reference](/getting-started/configuration-reference/).
 
 #### Examples
 
@@ -73,7 +76,7 @@ rackd server
 rackd server --listen-addr :9000
 
 # Start with authentication
-rackd server --api-auth-token mysecret
+rackd server --listen-addr 127.0.0.1:8080
 
 # Start with custom data directory
 rackd server --data-dir /var/lib/rackd
@@ -574,6 +577,34 @@ rackd user password --id <user-id>
 
 You will be prompted for the old and new passwords.
 
+#### user reset-password
+
+Reset a user's password directly in the database — the recovery path when
+the only admin's password is lost. Requires no running server and no
+authentication; the server should be stopped while it runs.
+
+```bash
+rackd user reset-password --data-dir <dir> --username <name>
+```
+
+**Options:**
+- `--data-dir <dir>` - Data directory containing `rackd.db` (default `./data`)
+- `--username <name>` - Account to reset (e.g. `admin`)
+
+You will be prompted (hidden input) for the new password (min 8
+characters); the password is hashed with the server's bcrypt policy and
+all active sessions for the user are invalidated.
+
+Docker recovery:
+
+```bash
+docker stop rackd
+docker run -it --rm -v /path/on/host/data:/data --entrypoint rackd \
+  ghcr.io/martinsuchenak/rackd:latest \
+  user reset-password --data-dir /data --username admin
+docker start rackd
+```
+
 ### role
 
 Manage roles and permissions.
@@ -685,7 +716,7 @@ API Key created successfully!
 
 ID:   key-123
 Name: CI/CD Pipeline
-Key:  rak_live_xxxxxxxxxxxx
+Key:  43-char-base64url-random-string
 
 ⚠️  Save this key securely - it will not be shown again!
 ```
@@ -1116,6 +1147,115 @@ rackd migrate run [options]
 rackd migrate run
 ```
 
+### reservation
+
+Manage IP reservations in pools.
+
+```bash
+rackd reservation list [options]   # list reservations (--pool to filter)
+rackd reservation get --id <id>
+rackd reservation create [options] # --pool, --ip, --hostname, --purpose, --expires-in-days
+rackd reservation update --id <id> [options]
+rackd reservation delete --id <id>
+rackd reservation release --id <id>
+```
+
+### circuit
+
+Manage circuit documentation (provider links, IDs, bandwidth).
+
+```bash
+rackd circuit list
+rackd circuit get --id <id>
+rackd circuit create [options]     # --name, --provider, --circuit-id, ...
+rackd circuit update --id <id> [options]
+rackd circuit delete --id <id>
+```
+
+### nat
+
+Manage NAT mappings.
+
+```bash
+rackd nat list
+rackd nat get --id <id>
+rackd nat create [options]
+rackd nat update --id <id> [options]
+rackd nat delete --id <id>
+```
+
+### conflict
+
+Detect and resolve IP/subnet conflicts.
+
+```bash
+rackd conflict list [options]      # --status, --severity filters
+rackd conflict get --id <id>
+rackd conflict detect              # run detection across the inventory
+rackd conflict resolve --id <id> [options]
+rackd conflict delete --id <id>
+```
+
+### webhook
+
+Manage webhooks.
+
+```bash
+rackd webhook list
+rackd webhook get --id <id>
+rackd webhook create [options]
+rackd webhook update --id <id> [options]
+rackd webhook delete --id <id>
+rackd webhook ping --id <id>       # send a test event
+rackd webhook events               # list available event types
+```
+
+### custom-field
+
+Manage custom field definitions.
+
+```bash
+rackd custom-field list
+rackd custom-field get --id <id>
+rackd custom-field types            # list supported field types
+rackd custom-field create [options]
+rackd custom-field update --id <id> [options]
+rackd custom-field delete --id <id>
+```
+
+### scan-profile
+
+Manage discovery scan profiles.
+
+```bash
+rackd scan-profile list
+rackd scan-profile get --id <id>
+rackd scan-profile create [options]
+rackd scan-profile update --id <id> [options]
+rackd scan-profile delete --id <id>
+```
+
+### scheduled-scan
+
+Manage scheduled discovery scans (cron-based).
+
+```bash
+rackd scheduled-scan list
+rackd scheduled-scan get --id <id>
+rackd scheduled-scan create [options]
+rackd scheduled-scan update --id <id> [options]
+rackd scheduled-scan delete --id <id>
+```
+
+### oauth
+
+Manage MCP OAuth 2.1 clients (**admin only**).
+
+```bash
+rackd oauth list                   # list registered OAuth clients
+rackd oauth delete --id <id>       # delete a client (revokes its tokens)
+```
+
 ### version
 
 Show version information.
@@ -1206,26 +1346,10 @@ rackd device list --output yaml
 All CLI options can be set via environment variables:
 
 ```bash
-export RACKD_API_URL=http://localhost:8080
-export RACKD_API_TOKEN=mysecret
-export RACKD_OUTPUT=json
+export RACKD_SERVER_URL=http://localhost:8080
+export RACKD_TOKEN=your-api-key
 
 rackd device list
-```
-
-## Shell Completion
-
-Generate shell completion scripts:
-
-```bash
-# Bash
-rackd completion bash > /etc/bash_completion.d/rackd
-
-# Zsh
-rackd completion zsh > /usr/local/share/zsh/site-functions/_rackd
-
-# Fish
-rackd completion fish > ~/.config/fish/completions/rackd.fish
 ```
 
 ## Examples
@@ -1234,10 +1358,10 @@ rackd completion fish > ~/.config/fish/completions/rackd.fish
 
 ```bash
 # 1. Start server
-rackd server --api-auth-token mysecret &
+rackd server --listen-addr 127.0.0.1:8080 &
 
 # 2. Configure CLI
-export RACKD_API_TOKEN=mysecret
+export RACKD_TOKEN=mysecret
 
 # 3. Add datacenter
 rackd datacenter add --name dc1 --location "New York"

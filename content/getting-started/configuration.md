@@ -20,13 +20,17 @@ Rackd can be configured through environment variables. All configuration options
 
 | Variable | Default | Description |
 |----------|---------|-------------|
-| `API_AUTH_TOKEN` | _(empty)_ | Bearer token for API authentication. If empty, API is unauthenticated |
-| `MCP_AUTH_TOKEN` | _(empty)_ | Bearer token for MCP server authentication. If empty, MCP is unauthenticated |
+| `ENCRYPTION_KEY` | _(empty)_ | 64 hex chars (32 bytes). Encrypts stored SNMP/SSH credentials, DNS provider tokens and webhook secrets at rest. Generate with `openssl rand -hex 32`. Without it (outside `--dev-mode`) credential/DNS features are disabled |
+| `INITIAL_ADMIN_USERNAME` | _(empty)_ | Bootstrap admin username, applied only when the database has no users |
+| `INITIAL_ADMIN_PASSWORD` | _(empty)_ | Bootstrap admin password (min 8 characters) |
+| `INITIAL_ADMIN_EMAIL` | `admin@localhost` | Bootstrap admin email |
 | `COOKIE_SECURE` | `true` | Send session cookies only over HTTPS. Set to `false` for local dev without TLS |
 | `SESSION_TTL` | `24h` | Duration for which a user session is valid |
 | `SESSION_STORE_TYPE` | `sqlite` | The backend storage for sessions (`sqlite`, `valkey`, `redis`) |
 | `VALKEY_URL` | `redis://localhost:6379/0` | The URL for Valkey/Redis if `SESSION_STORE_TYPE` is `valkey` or `redis` |
-| `TRUST_PROXY` | `false` | Trust `X-Forwarded-For` and `X-Real-IP` headers from reverse proxies |
+| `TRUST_PROXY` | `false` | Honor `X-Forwarded-For` / `X-Real-IP` headers from reverse proxies (rate limiting, audit logging) |
+| `TRUSTED_PROXIES` | _(empty)_ | Comma-separated IPs/CIDRs of trusted reverse proxies. Required when `TRUST_PROXY=true`: forwarded headers are honored only from these peers, otherwise ignored (fail-closed) |
+| `SSRF_ALLOW_PRIVATE_TARGETS` | `false` | Allow webhook and DNS provider endpoints on private ranges (RFC1918/CGNAT/ULA) for intentional internal integrations. Loopback, link-local (cloud metadata) and multicast are always blocked |
 
 ### Rate Limiting Options
 
@@ -82,8 +86,8 @@ See [Audit Trail](audit.md) for detailed documentation.
 # COOKIE_SECURE and RATE_LIMIT_ENABLED are already true by default
 export DATA_DIR="/var/lib/rackd"
 export LISTEN_ADDR=":8080"
-export API_AUTH_TOKEN="your-secure-api-token"
-export MCP_AUTH_TOKEN="your-secure-mcp-token"
+export ENCRYPTION_KEY="your-64-hex-char-key"
+export INITIAL_ADMIN_PASSWORD="your-secure-password"
 export LOG_FORMAT="json"
 export LOG_LEVEL="info"
 export DISCOVERY_INTERVAL="12h"
@@ -104,7 +108,9 @@ docker run -d \
   -p 8080:8080 \
   -v /var/lib/rackd:/data \
   -e DATA_DIR="/data" \
-  -e API_AUTH_TOKEN="your-token" \
+  -e ENCRYPTION_KEY="your-64-hex-char-key" \
+  -e INITIAL_ADMIN_USERNAME="admin" \
+  -e INITIAL_ADMIN_PASSWORD="your-secure-password" \
   -e LOG_FORMAT="json" \
   rackd:latest
 ```
@@ -114,15 +120,16 @@ docker run -d \
 Duration values (like `DISCOVERY_INTERVAL` and `DISCOVERY_TIMEOUT`) use Go's duration format:
 
 - `s` - seconds
-- `m` - minutes  
+- `m` - minutes
 - `h` - hours
-- `d` - days (24h)
 
 Examples:
 - `30s` - 30 seconds
 - `5m` - 5 minutes
 - `2h` - 2 hours
 - `24h` - 24 hours
+
+For multi-day values use hours (e.g. `72h`); Go durations have no day unit.
 - `1h30m` - 1 hour 30 minutes
 
 ## Security Considerations
@@ -169,7 +176,9 @@ You can use a `.env` file for configuration:
 DATA_DIR=./data
 LISTEN_ADDR=:8080
 LOG_LEVEL=debug
-API_AUTH_TOKEN=dev-token-123
+ENCRYPTION_KEY=your-64-hex-char-key
+INITIAL_ADMIN_USERNAME=admin
+INITIAL_ADMIN_PASSWORD=dev-password-only-for-local
 DISCOVERY_INTERVAL=1h
 ```
 

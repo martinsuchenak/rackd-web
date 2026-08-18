@@ -34,8 +34,9 @@ docker run -d \
   -e DATA_DIR=/data \
   -e LOG_LEVEL=info \
   -e LOG_FORMAT=json \
-  -e API_AUTH_TOKEN=your-secure-token \
-  -e MCP_AUTH_TOKEN=your-mcp-token \
+  -e ENCRYPTION_KEY=your-64-hex-char-key \
+  -e INITIAL_ADMIN_USERNAME=admin \
+  -e INITIAL_ADMIN_PASSWORD=your-secure-password \
   ghcr.io/martinsuchenak/rackd:latest
 ```
 
@@ -59,10 +60,11 @@ services:
       - DATA_DIR=/data
       - LOG_LEVEL=info
       - LOG_FORMAT=json
-      - API_AUTH_TOKEN=${API_AUTH_TOKEN}
-      - MCP_AUTH_TOKEN=${MCP_AUTH_TOKEN}
+      - ENCRYPTION_KEY=${ENCRYPTION_KEY}
+      - INITIAL_ADMIN_USERNAME=${INITIAL_ADMIN_USERNAME:-admin}
+      - INITIAL_ADMIN_PASSWORD=${INITIAL_ADMIN_PASSWORD}
     healthcheck:
-      test: ["CMD", "wget", "-q", "--spider", "http://localhost:8080/api/datacenters"]
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:8080/healthz"]
       interval: 30s
       timeout: 5s
       retries: 3
@@ -84,8 +86,9 @@ services:
 Create `.env` file:
 
 ```bash
-API_AUTH_TOKEN=your-secure-api-token
-MCP_AUTH_TOKEN=your-secure-mcp-token
+ENCRYPTION_KEY=your-64-hex-char-key
+INITIAL_ADMIN_USERNAME=admin
+INITIAL_ADMIN_PASSWORD=your-secure-password
 ```
 
 Deploy:
@@ -93,6 +96,37 @@ Deploy:
 ```bash
 docker-compose up -d
 ```
+
+## Docker Networking for Discovery
+
+The default Docker **bridge** network NATs all container traffic, which
+breaks Layer-2 discovery features: no ARP visibility (MAC addresses and
+vendors), and broadcast protocols (mDNS/NetBIOS/LLDP) cannot cross the
+bridge — only unicast TCP/ICMP probing works.
+
+For full discovery capability, run rackd with host networking and bind the
+API to loopback behind your TLS reverse proxy:
+
+```yaml
+services:
+  rackd:
+    image: ghcr.io/martinsuchenak/rackd:latest
+    container_name: rackd
+    restart: unless-stopped
+    network_mode: host            # share the host network namespace
+    volumes:
+      - ./data:/data
+    environment:
+      - DATA_DIR=/data
+      - LISTEN_ADDR=127.0.0.1:8080  # only the local proxy can reach the API
+      - ENCRYPTION_KEY=${ENCRYPTION_KEY}
+      - INITIAL_ADMIN_USERNAME=${INITIAL_ADMIN_USERNAME:-admin}
+      - INITIAL_ADMIN_PASSWORD=${INITIAL_ADMIN_PASSWORD}
+```
+
+No `ports:` mapping is used (or needed) with host networking. Alternative
+without host networking: configure SNMP credentials — SNMP is UDP unicast
+and works from bridged containers, yielding hostnames, interfaces and MACs.
 
 ## Nomad Deployment
 
@@ -178,8 +212,9 @@ WantedBy=multi-user.target
 Create `/etc/rackd/rackd.env`:
 
 ```bash
-API_AUTH_TOKEN=your-secure-token
-MCP_AUTH_TOKEN=your-mcp-token
+ENCRYPTION_KEY=your-64-hex-char-key
+INITIAL_ADMIN_USERNAME=admin
+INITIAL_ADMIN_PASSWORD=your-secure-password
 ```
 
 Enable and start:
@@ -191,6 +226,12 @@ sudo systemctl start rackd
 ```
 
 ## Reverse Proxy Setup
+
+When running behind a reverse proxy, set `TRUST_PROXY=true` **and**
+`TRUSTED_PROXIES` to the proxy address (e.g. `127.0.0.1`) so rackd honors
+forwarded headers only from that peer for rate limiting and audit logging,
+and bind `LISTEN_ADDR` to loopback so the API is only reachable through the
+proxy.
 
 ### Nginx
 

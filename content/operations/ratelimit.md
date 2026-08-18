@@ -9,14 +9,14 @@ Rackd includes built-in rate limiting to prevent API abuse and ensure fair resou
 
 ## Overview
 
-Rate limiting is **disabled by default** and can be enabled via environment variables. When enabled, it tracks request rates per client (by IP address or API key) and returns HTTP 429 (Too Many Requests) when limits are exceeded.
+Rate limiting is **enabled by default** (`RATE_LIMIT_ENABLED=true`). It tracks request rates per client IP and returns HTTP 429 (Too Many Requests) when limits are exceeded. Disable it with `RATE_LIMIT_ENABLED=false` for local development.
 
 ## Configuration
 
 Rate limiting is configured via environment variables:
 
 ```bash
-# Enable rate limiting (default: false)
+# Rate limiting (enabled by default)
 RATE_LIMIT_ENABLED=true
 
 # Maximum requests per window (default: 100)
@@ -53,13 +53,18 @@ RATE_LIMIT_WINDOW=10s
 
 ### Client Identification
 
-Rate limits are applied per client, identified by:
+Rate limits are applied per client, identified by IP address:
 
-1. **API Key** (if present) - Extracted from `Authorization: Bearer <token>` header
-2. **IP Address** (fallback) - Extracted from:
-   - `X-Forwarded-For` header (first IP)
-   - `X-Real-IP` header
-   - `RemoteAddr` (direct connection)
+1. **Forwarded headers** (only when `TRUST_PROXY=true` **and** the direct
+   peer matches a `TRUSTED_PROXIES` CIDR) - uses the rightmost
+   `X-Forwarded-For` entry (the address appended by your own proxy) or
+   `X-Real-IP`
+2. **RemoteAddr** (default) - the direct socket address
+
+Headers from untrusted peers are ignored, so clients cannot spoof
+`X-Forwarded-For` to rotate rate-limit buckets. Keying deliberately does
+not use the raw `Authorization` header: anonymous clients could otherwise
+rotate fake Bearer tokens for fresh buckets.
 
 ### Token Bucket Algorithm
 
@@ -70,13 +75,12 @@ Rackd uses a token bucket algorithm:
 - Buckets refill completely after `RATE_LIMIT_WINDOW` expires
 - Requests are blocked when bucket is empty
 
-### Localhost Bypass
+### No Localhost Bypass
 
-Requests from localhost (`127.0.0.1`, `::1`) **always bypass** rate limiting. This ensures:
-
-- Local development is never rate limited
-- CLI commands work without restrictions
-- Health checks and monitoring aren't affected
+There is no localhost exemption: requests from `127.0.0.1` are limited like
+any other client. Health endpoints (`/healthz`, `/readyz`) are lightweight
+and not rate-limited in practice for typical monitoring intervals; raise
+`RATE_LIMIT_REQUESTS` if a local monitoring agent trips the limiter.
 
 ## Response Headers
 
@@ -154,7 +158,7 @@ curl -H "Authorization: Bearer key2" http://localhost:8080/api/devices
 
 ### For Administrators
 
-1. **Start disabled** - Enable rate limiting only when needed
+1. **Keep it enabled** - It is on by default; leave it on in production
 2. **Monitor usage** - Check logs for rate limit events
 3. **Adjust limits** - Tune based on actual usage patterns
 4. **Use reverse proxy** - Consider nginx/Caddy rate limiting for additional protection
@@ -221,7 +225,7 @@ Rate limits are per-client:
 ## Security Considerations
 
 1. **Not a DDoS solution** - Rate limiting helps but isn't sufficient for DDoS protection
-2. **IP spoofing** - Trust `X-Forwarded-For` only behind trusted proxies
+2. **IP spoofing** - Set `TRUST_PROXY=true` together with `TRUSTED_PROXIES` (e.g. `127.0.0.1`); forwarded headers are honored only from those peers
 3. **API key sharing** - Shared keys share rate limits
 4. **Localhost bypass** - Ensure server isn't exposed with localhost access
 

@@ -15,11 +15,17 @@ http://localhost:8080/api
 
 ## Authentication
 
-Rackd supports optional Bearer token authentication. When enabled, include the token in the Authorization header:
+Authentication is **required** on all API endpoints. Rackd accepts:
+
+- **Session cookie** - set by `POST /api/auth/login` (HttpOnly, SameSite=Strict)
+- **API key** - Bearer token created in the web UI or via `rackd apikey generate`
 
 ```http
-Authorization: Bearer <your-token>
+Authorization: Bearer <your-api-key>
 ```
+
+`GET /healthz`, `GET /readyz`, the login endpoint and the OAuth discovery
+endpoints are the only unauthenticated routes.
 
 ## Content Type
 
@@ -48,19 +54,33 @@ All errors return a consistent JSON structure:
 - `200` - Success
 - `201` - Created
 - `204` - No Content (successful deletion)
-- `400` - Bad Request (validation errors)
+- `400` - Bad Request (validation errors, invalid JSON)
+- `401` - Unauthorized (missing/invalid credentials)
+- `403` - Forbidden (insufficient permissions)
 - `404` - Not Found
 - `409` - Conflict (resource already exists or no available IPs)
+- `429` - Too Many Requests (rate limited)
+- `502` - Bad Gateway (upstream DNS provider unreachable)
 - `500` - Internal Server Error
 
 ### Common Error Codes
 
-- `VALIDATION_ERROR` - Request validation failed
-- `INVALID_INPUT` - Invalid JSON or request format
-- `DEVICE_NOT_FOUND` - Device does not exist
-- `NETWORK_NOT_FOUND` - Network does not exist
-- `DATACENTER_NOT_FOUND` - Datacenter does not exist
-- `POOL_NOT_FOUND` - IP pool does not exist
+- `VALIDATION_ERROR` - Request validation failed (field details in `details`)
+- `INVALID_INPUT` / `INVALID_JSON` - Invalid request format
+- `INVALID_CREDENTIALS` - Login failed (username or password wrong)
+- `UNAUTHORIZED` - Missing or invalid credentials
+- `FORBIDDEN` - Authenticated but lacking permission
+- `NOT_FOUND` - Resource does not exist
+- `ALREADY_EXISTS` - Resource already exists
+- `IP_NOT_AVAILABLE` - No free IP in pool
+- `EXPIRED_KEY` - API key expired
+- `LEGACY_API_KEY_UNSUPPORTED` - Legacy key without user association
+- `RATE_LIMIT_EXCEEDED` - Global rate limit hit
+- `LOGIN_RATE_LIMIT_EXCEEDED` - Login rate limit hit
+- `CSRF_FAILED` - Session request missing the `X-Requested-With` header
+- `PROVIDER_UNREACHABLE` - DNS provider connection test failed (cause in `error`)
+- `CANNOT_DELETE_SELF` - Attempted self-deletion
+- `SYSTEM_ROLE` - Operation on a system role
 - `INTERNAL_ERROR` - Server error
 
 ### Validation Errors

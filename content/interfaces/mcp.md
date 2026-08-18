@@ -256,39 +256,33 @@ Promote a discovered device to inventory.
 
 ### Claude Desktop (with OAuth)
 
-When OAuth is enabled, Claude Desktop can authenticate via the standard MCP OAuth flow. Add to your Claude Desktop MCP configuration:
+Rackd's MCP server is HTTP-based (endpoint `/mcp`) — there is no stdio
+mode and no `rackd mcp` command. Configure it as a remote HTTP server
+(Claude Desktop: Settings -> Connectors -> Add custom connector, or your
+client's remote/URL MCP support):
 
-```json
-{
-  "mcpServers": {
-    "rackd": {
-      "command": "rackd",
-      "args": ["mcp"],
-      "env": {
-        "RACKD_URL": "http://localhost:8080"
-      }
-    }
-  }
-}
-```
+- **URL**: `https://rackd.example.com/mcp`
+- **Authentication**: OAuth 2.1 (the client will guide you through login)
 
-Claude Desktop will automatically:
+When OAuth is enabled (`MCP_OAUTH_ENABLED=true`), the client will
+automatically:
+
 1. Discover OAuth endpoints via `/.well-known/oauth-protected-resource`
-2. Open a browser for you to log in to Rackd
+2. Open a browser for you to log in to Rackd and approve the requested scopes
 3. Store and refresh tokens automatically
 
-### Claude Desktop (with API Key)
+### Generic MCP clients (with API key)
 
-For simpler setups without OAuth, use an API key:
+For clients without OAuth support, use an API key as a Bearer token
+against the HTTP endpoint:
 
 ```json
 {
   "mcpServers": {
     "rackd": {
-      "command": "rackd",
-      "args": ["mcp"],
-      "env": {
-        "RACKD_API_KEY": "your-api-key"
+      "url": "https://rackd.example.com/mcp",
+      "headers": {
+        "Authorization": "Bearer your-api-key"
       }
     }
   }
@@ -386,7 +380,9 @@ Common error codes:
 
 ## Security Considerations
 
-- **OAuth (recommended)**: Users authenticate with their own credentials; tokens are scoped to their RBAC permissions
+- **OAuth (recommended)**: Users authenticate with their own credentials. Issued token scopes are clamped to the intersection of the client's requested scopes, its registered scopes, the permission catalog, and **the consenting user's own permissions** — a user can never delegate more than they hold. Permission revocations apply at the next token refresh
+- **Scope policy**: client registration must request explicit catalog scopes (`devices:read` etc.); wildcard (`*`) and unknown scopes are rejected. Redirect URIs must be absolute https (loopback http allowed for local development)
+- **Confidential clients** authenticate with their `client_secret` at the token endpoint; public clients must use PKCE (S256)
 - **API Keys**: Use strong, randomly generated keys; keys inherit creator's permissions
 - Run MCP server on localhost or secure networks only
 - Use HTTPS in production (set `MCP_OAUTH_ISSUER_URL` to your HTTPS URL)
@@ -396,7 +392,7 @@ Common error codes:
 
 ## Managing OAuth Clients
 
-Registered OAuth clients can be viewed and revoked in the web UI at `/oauth-clients`. Each client shows:
+Registered OAuth clients can be viewed and revoked in the web UI at `/oauth-clients` (**admin only** — requires `users:list`/`users:delete` permissions). Each client shows:
 - Client name and ID
 - Redirect URIs
 - Client type (public/confidential)

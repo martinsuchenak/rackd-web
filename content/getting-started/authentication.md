@@ -80,7 +80,7 @@ api_token: YOUR_API_KEY
 Or via environment variable:
 
 ```bash
-export RACKD_API_TOKEN=YOUR_API_KEY
+export RACKD_TOKEN=YOUR_API_KEY
 ```
 
 #### Key Requirements
@@ -124,14 +124,26 @@ OAuth endpoints:
 - `POST /mcp-oauth/token` — token exchange
 - `POST /mcp-oauth/revoke` — token revocation
 
-Client management:
+Client management (admin only):
 - `GET /api/oauth/clients` — list registered OAuth clients
-- `DELETE /api/oauth/clients/{id}` — delete a client
+- `DELETE /api/oauth/clients/{id}` — delete a client (revokes its tokens)
+
+Registration policy:
+- Redirect URIs must be absolute https (loopback http is allowed for local development); wildcards, custom schemes, userinfo and fragments are rejected
+- Registered scopes must be explicit entries from the permission catalog (`devices:read`, `networks:list`, ...); wildcard (`*`) and unknown scopes are rejected
+- Confidential clients authenticate with `client_secret` at the token endpoint; public clients must use PKCE (S256)
+
+Scope enforcement:
+- The consent screen shows requested ∩ registered ∩ catalog scopes
+- Issued tokens are additionally clamped to the **consenting user's own permissions** — a user can never delegate more than they hold
+- Scopes are re-clamped on every refresh, so permission revocations take effect at the next refresh
+- Login failures return `401 INVALID_CREDENTIALS` (deliberately vague: no username enumeration)
 
 Token properties:
 - Access token TTL: 1 hour (configurable via `MCP_OAUTH_ACCESS_TOKEN_TTL`)
 - Refresh token TTL: 30 days (configurable via `MCP_OAUTH_REFRESH_TOKEN_TTL`)
-- Refresh token rotation with replay detection
+- Refresh token rotation with replay detection; expired refresh tokens are rejected
+- Tokens are stored as SHA-256 hashes; revocation requires client authentication and only affects the client's own tokens
 
 ## RBAC
 
@@ -162,7 +174,7 @@ POST   /api/users/{id}/reset-password — admin password reset
 ```
 
 Password requirements:
-- Minimum 12 characters
+- Minimum 8 characters
 - Hashed with bcrypt (cost 14)
 - Password change invalidates all existing sessions
 

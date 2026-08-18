@@ -14,11 +14,21 @@ Get Rackd running in 5 minutes and perform essential operations.
 curl -LO https://github.com/martinsuchenak/rackd/releases/latest/download/rackd-linux-amd64
 chmod +x rackd-linux-amd64
 
-# Start server
+# Bootstrap the first admin and start the server
+export INITIAL_ADMIN_USERNAME=admin
+export INITIAL_ADMIN_PASSWORD=your-secure-password
 ./rackd-linux-amd64 server
 ```
 
-Access web UI at http://localhost:8080
+Open http://localhost:8080 and **sign in with the admin credentials you
+set above** — authentication is required for everything (the CLI too).
+For CLI convenience, create an API key in the web UI
+(Settings → API Keys) and export it:
+
+```bash
+export RACKD_SERVER_URL=http://localhost:8080
+export RACKD_TOKEN=your-api-key
+```
 
 ## 2. Create First Datacenter (30 seconds)
 

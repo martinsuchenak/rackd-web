@@ -454,11 +454,11 @@ Audit logs may contain sensitive information:
 
 Protect audit log endpoints:
 ```bash
-# Enable API authentication
-export API_AUTH_TOKEN="your-secure-token"
+# Audit endpoints require an authenticated session or API key.
+# Create an API key in the web UI (Settings -> API Keys) or via the CLI,
+# then use it as a Bearer token:
 
-# Access audit logs with authentication
-curl -H "Authorization: Bearer your-secure-token" http://localhost:8080/api/audit
+curl -H "Authorization: Bearer rak-your-api-key" http://localhost:8080/api/audit
 ```
 
 ### Audit Log Integrity

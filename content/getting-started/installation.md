@@ -120,8 +120,10 @@ services:
     volumes:
       - rackd-data:/data
     environment:
-      - RACKD_LOG_LEVEL=info
-      - RACKD_API_AUTH_TOKEN=your-secret-token
+      - LOG_LEVEL=info
+      - ENCRYPTION_KEY=your-64-hex-char-key
+      - INITIAL_ADMIN_USERNAME=admin
+      - INITIAL_ADMIN_PASSWORD=your-secure-password
     restart: unless-stopped
 
 volumes:
@@ -177,14 +179,18 @@ Create `/etc/rackd/config.env`:
 ```bash
 # Server configuration
 RACKD_LISTEN_ADDR=:8080
-RACKD_DATA_DIR=/var/lib/rackd
+DATA_DIR=/var/lib/rackd
 
-# Authentication (recommended for production)
-RACKD_API_AUTH_TOKEN=your-secret-api-token
-RACKD_MCP_AUTH_TOKEN=your-secret-mcp-token
+# Encryption at rest for stored credentials and DNS provider tokens
+# Generate with: openssl rand -hex 32
+ENCRYPTION_KEY=your-64-hex-char-key
+
+# Bootstrap admin (applied only when the database has no users)
+INITIAL_ADMIN_USERNAME=admin
+INITIAL_ADMIN_PASSWORD=your-secure-password
 
 # Logging
-RACKD_LOG_LEVEL=info
+LOG_LEVEL=info
 RACKD_LOG_FORMAT=json
 
 # Discovery
@@ -192,7 +198,7 @@ RACKD_DISCOVERY_ENABLED=true
 RACKD_DISCOVERY_INTERVAL=24h
 
 # Credentials encryption
-RACKD_ENCRYPTION_KEY=your-32-byte-encryption-key-here
+ENCRYPTION_KEY=your-32-byte-encryption-key-here
 ```
 
 See [Configuration Guide](configuration.md) for all options.

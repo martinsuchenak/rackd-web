@@ -11,7 +11,7 @@ Rackd is a lightweight, self-contained IPAM (IP Address Management) and device i
 - **IP Address Management** - Track networks, subnets, and IP allocations with conflict detection
 - **Device Inventory** - Manage servers, switches, routers, and network devices
 - **Network Discovery** - Automated scanning with multiple protocols
-- **DNS Integration** - Sync with Cloudflare, Route53, PowerDNS, Technitium, and BIND
+- **DNS Integration** - Sync records with Technitium DNS Server (PowerDNS and BIND planned)
 - **Webhooks & Automation** - Event-driven notifications and CI/CD integration
 - **MCP Server** - Model Context Protocol for AI tool integration
 - **RBAC Security** - Role-based access control with fine-grained permissions

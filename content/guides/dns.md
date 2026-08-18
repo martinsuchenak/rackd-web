@@ -173,9 +173,20 @@ rackd dns provider create \
 
 Requirements:
 
-- Technitium DNS Server 10.0+
-- Admin API token with zone management permissions
-- HTTP/HTTPS access to the server
+- Technitium DNS Server **v15.x** (the integration uses the v15 API paths; a
+  legacy token fallback keeps v15.0-v15.2 working)
+- API token with zone management permissions (Administration -> API Tokens)
+- HTTP/HTTPS access to the server (the web console root URL; a trailing
+  `/api` is tolerated and stripped)
+
+Notes:
+
+- Provider tokens are encrypted at rest with `ENCRYPTION_KEY`
+- Endpoints on private networks require `SSRF_ALLOW_PRIVATE_TARGETS=true`;
+  loopback, link-local (cloud metadata) and multicast targets are always
+  blocked
+- **Test connection** failures return `502 PROVIDER_UNREACHABLE` with the
+  cause (SSRF block, timeout, refused, bad credentials)
 
 ### PowerDNS
 

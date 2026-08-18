@@ -15,13 +15,14 @@ Rackd is a lightweight, self-contained IPAM and device inventory system built wi
 
 ### Key Features
 
-- **IP Address Management** - Track networks, subnets, and IP allocations with conflict detection
-- **Device Inventory** - Manage servers, switches, routers, and network devices
-- **Network Discovery** - Automated scanning with ARP, SNMP, mDNS, NetBIOS, and LLDP
-- **DNS Integration** - Support for Cloudflare, Route53, PowerDNS, Technitium, and BIND
-- **Webhooks & Automation** - Event-driven notifications and CI/CD integration
-- **MCP Server** - Model Context Protocol for AI tool integration
-- **RBAC Security** - Role-based access control with fine-grained permissions
+- **IP Address Management** - Track networks, subnets, pools, and reservations with conflict detection
+- **Device Inventory** - Manage servers, switches, routers, and network devices with custom fields, relationships, and full-text search
+- **Network Discovery** - Scheduled and profile-driven scanning with ARP, SNMP, mDNS, NetBIOS, LLDP, banner grabbing and OS fingerprinting
+- **DNS Integration** - Technitium DNS Server integration with record sync, promotion and PTR generation (PowerDNS/BIND planned)
+- **Circuits & NAT** - Document physical circuits and NAT mappings alongside your inventory
+- **Webhooks & Automation** - Signed event notifications and CI/CD integration
+- **MCP Server + OAuth 2.1** - Model Context Protocol for AI tool integration, with PKCE authorization and permission-clamped scopes
+- **RBAC Security** - Role-based access control with fine-grained permissions and a full audit log
 
 ## Quick Start
 
@@ -46,28 +47,16 @@ The web interface will be available at `http://localhost:8080`.
 Install, configure, and get up and running with Rackd quickly.
 
 ### [User Guides](/guides/)
-Learn how to manage devices, networks, and discover your infrastructure.
-
-### [Features](/features/)
-Explore DNS integration, webhooks, custom fields, and more.
+Manage devices, networks, DNS, discovery, RBAC and more.
 
 ### [Interfaces](/interfaces/)
 Access Rackd via Web UI, CLI, REST API, or MCP server.
-
-### [Integrations](/integrations/)
-Connect with Terraform, Ansible, and monitoring systems.
 
 ### [Examples](/examples/)
 Sample scripts, workflows, and real-world use cases.
 
 ### [Operations](/operations/)
 Deploy, backup, secure, and monitor your Rackd instance.
-
-### [Reference](/reference/)
-API reference, CLI commands, and configuration options.
-
-### [Development](/development/)
-Architecture overview and contributing guidelines.
 
 </div>
 
