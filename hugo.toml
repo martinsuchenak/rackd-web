@@ -1,4 +1,4 @@
-baseURL = 'https://docs.rackd.io/'
+baseURL = 'https://getrackd.dev/'
 languageCode = 'en-us'
 title = 'Rackd'
 theme = 'docstone'
