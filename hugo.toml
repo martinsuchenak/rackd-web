@@ -11,6 +11,9 @@ theme = 'docstone'
   version = 'latest'
   license = 'MIT'
   themeKey = 'rackd-theme'
+  # Changelog page: fetched from the rackd repo at build time
+  changelogURL = 'https://raw.githubusercontent.com/martinsuchenak/rackd/main/CHANGELOG.md'
+  changelogSourceURL = 'https://github.com/martinsuchenak/rackd/blob/main/CHANGELOG.md'
 
   [[params.heroActions]]
     name = 'Get Started'
@@ -63,6 +66,11 @@ theme = 'docstone'
     name = 'Documentation'
     url = '/docs/introduction/'
     weight = 1
+
+  [[menus.main]]
+    name = 'Changelog'
+    url = '/changelog/'
+    weight = 2
 
   # Sidebar navigation
   [[menus.sidebar]]
@@ -256,6 +264,11 @@ theme = 'docstone'
       name = 'Full-Text Search'
       url = '/guides/fts/'
       weight = 5
+
+# Remote resources (the changelog) are re-fetched on every build
+[caches]
+  [caches.getresource]
+    maxAge = 0
 
 # Enable necessary features
 enableRobotsTXT = true

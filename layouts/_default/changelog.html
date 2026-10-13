@@ -1,0 +1,42 @@
+{{/*
+  Renders rackd's CHANGELOG.md, fetched at build time from params.changelogURL.
+  Only released versions are shown: the file's own title/intro and the
+  [Unreleased] section are dropped. If the fetch fails the build still
+  succeeds and the page links to the changelog on GitHub instead.
+*/}}
+{{ define "main" }}
+<article class="docs-content-wrapper" data-pagefind-body>
+  <h1>{{ .Title }}</h1>
+  {{ with .Description }}
+  <p class="docs-subtitle">{{ . }}</p>
+  {{ end }}
+
+  {{ .Content }}
+
+  {{ $source := .Site.Params.changelogSourceURL }}
+  {{ $rendered := false }}
+  {{ with .Site.Params.changelogURL }}
+    {{ with try (resources.GetRemote .) }}
+      {{ with .Err }}
+        {{ warnf "changelog: could not fetch %s: %s" $.Site.Params.changelogURL . }}
+      {{ else with .Value }}
+        {{ $md := .Content }}
+        {{/* Drop everything before the first version heading (title, intro). */}}
+        {{ $md = replaceRE `(?sm)\A.*?(^## \[)` "$1" $md }}
+        {{/* Drop the [Unreleased] section up to the next version heading. */}}
+        {{ $md = replaceRE `(?sm)^## \[Unreleased\].*?(^## \[)` "$1" $md }}
+        {{ if findRE `(?m)^## \[` $md 1 }}
+          {{ $.RenderString (dict "display" "block") $md }}
+          {{ $rendered = true }}
+        {{ end }}
+      {{ end }}
+    {{ end }}
+  {{ end }}
+
+  {{ if not $rendered }}
+  <p>The changelog could not be loaded. See <a href="{{ $source }}">CHANGELOG.md on GitHub</a>.</p>
+  {{ end }}
+
+  <p><a href="{{ $source }}">View CHANGELOG.md on GitHub</a></p>
+</article>
+{{ end }}
